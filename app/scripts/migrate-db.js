@@ -31,10 +31,14 @@ async function query(q) {
 async function migrate() {
   try {
     await query(`
-    CREATE TABLE IF NOT EXISTS entries (
+    CREATE TABLE IF NOT EXISTS template (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL,
+      name VARCHAR(128) NOT NULL,
+      html TEXT NOT NULL,
+      creator VARCHAR(32) NOT NULL,
+      likes INT NOT NULL DEFAULT 0,
+      used INT NOT NULL DEFAULT 0,
+      rate INT NOT NULL DEFAULT -1,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at 
         TIMESTAMP 

@@ -5,22 +5,22 @@ import { query } from '../../lib/db'
 const filter = new Filter()
 
 const handler: NextApiHandler = async (req, res) => {
-  const { title, content } = req.body
+  const { name, creator, html } = req.body
+  console.log(req.body)
   try {
-    if (!title || !content) {
+    if (!name || !creator || !html) {
       return res
         .status(400)
-        .json({ message: '`title` and `content` are both required' })
+        .json({ message: '`name`, `creator` and `html` are required' })
     }
 
     const results = await query(
       `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
+      INSERT INTO template (name, creator, html)
+      VALUES (?, ?, ?)
       `,
-      [filter.clean(title), filter.clean(content)]
+      [filter.clean(name), filter.clean(creator), filter.clean(html)]
     )
-
     return res.json(results)
   } catch (e) {
     res.status(500).json({ message: e.message })
