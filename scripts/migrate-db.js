@@ -13,7 +13,6 @@ const db = mysql({
     database: process.env.MYSQL_DATABASE,
     user: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
-    port: 30306,
   },
 })
 
@@ -31,14 +30,10 @@ async function query(q) {
 async function migrate() {
   try {
     await query(`
-    CREATE TABLE IF NOT EXISTS template (
+    CREATE TABLE IF NOT EXISTS entries (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(128) NOT NULL,
-      html TEXT NOT NULL,
-      creator VARCHAR(32) NOT NULL,
-      likes INT NOT NULL DEFAULT 0,
-      used INT NOT NULL DEFAULT 0,
-      rate INT NOT NULL DEFAULT -1,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at 
         TIMESTAMP 

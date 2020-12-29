@@ -1,16 +1,18 @@
 import Skeleton from 'react-loading-skeleton'
 
+import Nav from '@/components/nav'
 import Container from '@/components/container'
-import Entries from '@/components/templates'
+import Entries from '@/components/entries'
 
-import { useTemplates } from '@/lib/swr-hooks'
+import { useEntries } from '@/lib/swr-hooks'
 
-export default function EntriesPage() {
-  const { templates, isLoading } = useTemplates()
+export default function IndexPage() {
+  const { entries, isLoading } = useEntries()
 
   if (isLoading) {
     return (
       <div>
+        <Nav />
         <Container>
           <Skeleton width={180} height={24} />
           <Skeleton height={48} />
@@ -27,8 +29,9 @@ export default function EntriesPage() {
 
   return (
     <div>
+      <Nav />
       <Container>
-        <Entries templates={templates} />
+        <Entries entries={entries} />
       </Container>
     </div>
   )

@@ -5,24 +5,30 @@ import { mutate } from 'swr'
 import ButtonLink from '@/components/button-link'
 import Button from '@/components/button'
 
-function Template({ id, name, html }) {
+function Entry({ id, title, content }) {
   const [deleting, setDeleting] = useState(false)
 
   async function deleteEntry() {
     setDeleting(true)
-    let res = await fetch(`/api/delete-template?id=${id}`, { method: 'DELETE' })
+    let res = await fetch(`/api/delete-entry?id=${id}`, { method: 'DELETE' })
     let json = await res.json()
     if (!res.ok) throw Error(json.message)
-    mutate('/api/get-templates')
+    mutate('/api/get-entries')
     setDeleting(false)
   }
   return (
     <div>
       <div className="flex items-center">
-        <Link href={`/template/${id}`}>
-          <a className="font-bold py-2">{name}</a>
+        <Link href={`/entry/${id}`}>
+          <a className="font-bold py-2">{title}</a>
         </Link>
         <div className="flex ml-4">
+          <ButtonLink
+            href={`/entry/edit/${id}?title=${title}&content=${content}`}
+            className="h-5 py-0 mx-1"
+          >
+            Edit
+          </ButtonLink>
           <Button
             disabled={deleting}
             onClick={deleteEntry}
@@ -32,9 +38,9 @@ function Template({ id, name, html }) {
           </Button>
         </div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <p>{content}</p>
     </div>
   )
 }
 
-export default Template
+export default Entry
