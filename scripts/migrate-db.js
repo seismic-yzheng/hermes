@@ -13,6 +13,7 @@ const db = mysql({
     database: process.env.MYSQL_DATABASE,
     user: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
+    port: parseInt(process.env.MYSQL_PORT),
   },
 })
 
@@ -30,10 +31,14 @@ async function query(q) {
 async function migrate() {
   try {
     await query(`
-    CREATE TABLE IF NOT EXISTS entries (
+    CREATE TABLE IF NOT EXISTS template (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL,
+      name VARCHAR(128) NOT NULL,
+      html TEXT NOT NULL,
+      creator VARCHAR(32) NOT NULL,
+      likes INT NOT NULL DEFAULT 0,
+      used INT NOT NULL DEFAULT 0,
+      rate INT NOT NULL DEFAULT -1,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at 
         TIMESTAMP 
@@ -44,7 +49,7 @@ async function migrate() {
     `)
     console.log('migration ran successfully')
   } catch (e) {
-    console.error('could not run migration, double check your credentials.')
+    console.log(e.message)
     process.exit(1)
   }
 }
