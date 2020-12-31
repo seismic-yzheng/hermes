@@ -5,27 +5,41 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "migrate": "node scripts/migrate-db.js"
+    "migrate": "node scripts/migrate-db.js",
+    "test": "jest --forceExit"
   },
   "dependencies": {
     "bad-words": "^3.0.4",
     "clsx": "^1.1.1",
-    "dotenv": "^8.2.0",
+    "leaked-handles": "^5.2.0",
     "next": "^10.0.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-email-editor": "^1.2.0",
     "react-loading-skeleton": "^2.1.1",
     "serverless-mysql": "^1.5.4",
     "swr": "^0.3.9"
   },
   "devDependencies": {
-    "@types/node": "^14.14.6",
+    "@babel/preset-env": "^7.12.11",
+    "@types/jest": "^26.0.19",
+    "@types/node": "^14.14.17",
     "@types/react": "^16.9.55",
+    "dotenv": "^8.2.0",
+    "jest": "^26.6.3",
+    "node-mocks-http": "^1.9.0",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "^6.7.0",
+    "react-email-editor": "^1.2.0",
+    "supertest": "^6.0.1",
     "tailwindcss": "^1.7.4",
-    "typescript": "^4.0.5"
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
 }

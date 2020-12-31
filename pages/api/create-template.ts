@@ -6,7 +6,6 @@ const filter = new Filter()
 
 const handler: NextApiHandler = async (req, res) => {
   const { name, creator, html } = req.body
-  console.log(req.body)
   try {
     if (!name || !creator || !html) {
       return res
