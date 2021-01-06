@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next'
 import { query } from '../../lib/db'
 
 
-const handler: NextApiHandler = async (req, res) => {
+const GetTemplateHandler: NextApiHandler = async (req, res) => {
   const { id } = req.query
   try {
     if (!id) {
@@ -19,11 +19,10 @@ const handler: NextApiHandler = async (req, res) => {
     `,
       id
     )
-
     return res.json(results[0])
   } catch (e) {
     res.status(500).json({ message: e.message })
   }
 }
 
-export default handler
+export default GetTemplateHandler

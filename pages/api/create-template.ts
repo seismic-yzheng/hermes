@@ -4,7 +4,7 @@ import { query } from '../../lib/db'
 
 const filter = new Filter()
 
-const handler: NextApiHandler = async (req, res) => {
+const CreateTemplateHandler: NextApiHandler = async (req, res) => {
   const { name, creator, html } = req.body
   try {
     if (!name || !creator || !html) {
@@ -20,10 +20,10 @@ const handler: NextApiHandler = async (req, res) => {
       `,
       [filter.clean(name), filter.clean(creator), filter.clean(html)]
     )
-    return res.json(results)
+    return res.json({ "id": results["insertId"] })
   } catch (e) {
     res.status(500).json({ message: e.message })
   }
 }
 
-export default handler
+export default CreateTemplateHandler

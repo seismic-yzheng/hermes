@@ -40,10 +40,10 @@ async function migrate() {
       used INT NOT NULL DEFAULT 0,
       rate INT NOT NULL DEFAULT -1,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at 
-        TIMESTAMP 
-        NOT NULL 
-        DEFAULT CURRENT_TIMESTAMP 
+      updated_at
+        TIMESTAMP
+        NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP
     )
     `)
