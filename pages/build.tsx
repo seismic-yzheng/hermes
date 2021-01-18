@@ -14,7 +14,7 @@ const App = (props) => {
     try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
         const { design, html } = data
-        const res = await fetch('/api/create-template', {
+        const res = await fetch('/api/template', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

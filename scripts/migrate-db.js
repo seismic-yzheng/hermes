@@ -1,11 +1,11 @@
-const path = require('path')
-const envPath = path.resolve(process.cwd(), '.env.local')
+const path = require("path");
+const envPath = path.resolve(process.cwd(), ".env.local");
 
-console.log({ envPath })
+console.log({ envPath });
 
-require('dotenv').config({ path: envPath })
+require("dotenv").config({ path: envPath });
 
-const mysql = require('serverless-mysql')
+const mysql = require("serverless-mysql");
 
 const db = mysql({
   config: {
@@ -15,20 +15,20 @@ const db = mysql({
     password: process.env.MYSQL_PASSWORD,
     port: parseInt(process.env.MYSQL_PORT),
   },
-})
+});
 
 async function query(q) {
   try {
-    const results = await db.query(q)
-    await db.end()
-    return results
+    const results = await db.query(q);
+    await db.end();
+    return results;
   } catch (e) {
-    throw Error(e.message)
+    throw Error(e.message);
   }
 }
 
 // Create "entries" table if doesn't exist
-async function migrate() {
+async function createTemplateTable() {
   try {
     await query(`
     CREATE TABLE IF NOT EXISTS template (
@@ -46,12 +46,43 @@ async function migrate() {
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP
     )
-    `)
-    console.log('migration ran successfully')
+    `);
   } catch (e) {
-    console.log(e.message)
-    process.exit(1)
+    console.log(e.message);
+    process.exit(1);
   }
 }
 
-migrate().then(() => process.exit())
+async function createMarkdownTable() {
+  try {
+    await query(`
+    CREATE TABLE IF NOT EXISTS markdown (
+      id INT AUTO_INCREMENT,
+      type VARCHAR(16) NOT NULL,
+      name VARCHAR(128) NOT NULL,
+      PRIMARY KEY (id)
+    )
+    `);
+
+    await query(`
+    CREATE TABLE IF NOT EXISTS template_markdown (
+      template_id INT NOT NULL,
+      markdown_id INT NOT NULL,
+      default_value VARCHAR(128),
+      PRIMARY KEY (template_id, markdown_id),
+      FOREIGN KEY (template_id) REFERENCES template(id),
+      FOREIGN KEY (markdown_id) REFERENCES markdown(id)
+    )
+    `);
+  } catch (e) {
+    console.log(e.message);
+    process.exit(1);
+  }
+}
+
+async function migrate() {
+  await createTemplateTable();
+  await createMarkdownTable();
+  console.log("migration ran successfully");
+}
+migrate().then(() => process.exit());
