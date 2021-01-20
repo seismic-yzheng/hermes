@@ -1,6 +1,7 @@
 import { createRequest, createResponse } from "node-mocks-http";
 import templatesHandler from "../../pages/api/templates";
 import templateHandler from "../../pages/api/template/[id]";
+import sendEmailHandler from "../../pages/api/send-email";
 import createTemplateHandler from "../../pages/api/template";
 import {
   createTemplateTable,
@@ -13,9 +14,16 @@ import { getMarkdown } from "../../lib/markdown";
 
 jest.setTimeout(30000);
 
-async function getTestMarkdown(type = "string", default_value = undefined) {
-  const id = await getRandomInt(1000);
-  let markdown = { name: "markdown" + id, type: type };
+async function getTestMarkdown(
+  name = undefined,
+  type = "string",
+  default_value = undefined
+) {
+  if (name == undefined) {
+    const id = await getRandomInt(1000);
+    name = "markdown" + id;
+  }
+  let markdown = { name: name, type: type };
   if (default_value) {
     markdown["default_value"] = default_value;
   }
@@ -24,11 +32,14 @@ async function getTestMarkdown(type = "string", default_value = undefined) {
 
 const createTemplate = async (
   user: string = "user:test",
-  markdowns = undefined
+  markdowns = undefined,
+  html = undefined
 ) => {
   const id = await getRandomInt(1000);
   const name = "test" + id;
-  const html = "test_html" + id;
+  if (html == undefined) {
+    html = "test_html" + id;
+  }
   let body = {
     name: name,
     creator: user,
@@ -56,6 +67,19 @@ const getTemplate = async (id) => {
   });
   const response = createResponse();
   await templateHandler(request, response);
+  return response;
+};
+
+const sendEmail = async (id, markdowns) => {
+  const request = createRequest({
+    method: "POST",
+    body: {
+      id: id,
+      markdowns: markdowns,
+    },
+  });
+  const response = createResponse();
+  await sendEmailHandler(request, response);
   return response;
 };
 
@@ -131,8 +155,8 @@ describe("CRUD test for template", () => {
   });
   test("update template with markdowns", async () => {
     let markdowns = [
-      await getTestMarkdown(undefined, "test"),
-      await getTestMarkdown(undefined, "test"),
+      await getTestMarkdown(undefined, undefined, "test"),
+      await getTestMarkdown(undefined, undefined, "test"),
     ];
     let { response } = await createTemplate();
     expect(response._getStatusCode()).toBe(200);
@@ -274,5 +298,48 @@ describe("CRUD test for template", () => {
     });
     expect(response._getStatusCode()).toBe(200);
     expect(getIDs(response._getJSONData()).reverse()).toEqual(ids);
+  });
+});
+
+describe("test for sending email", () => {
+  beforeAll(async () => {
+    await createTemplateTable();
+    await createMarkdownTable();
+  });
+  afterAll(async () => {
+    await truncateMarkdownTable();
+    await truncateTemplateTable();
+  });
+  test("send email with markdown", async () => {
+    const html = `
+    <html>
+    <body onload="renderHello()">
+      <div id="target">Loading...</div>
+      <script id="template" type="x-tmpl-mustache">
+        Hello {{ name }}!
+      </script>
+      <script src="https://unpkg.com/mustache@latest"></script>
+      <script src="render.js"></script>
+    </body>
+    </html>`;
+    const expected = `
+    <html>
+    <body onload="renderHello()">
+      <div id="target">Loading...</div>
+      <script id="template" type="x-tmpl-mustache">
+        Hello John!
+      </script>
+      <script src="https://unpkg.com/mustache@latest"></script>
+      <script src="render.js"></script>
+    </body>
+    </html>`;
+    const markdown = await getTestMarkdown("name", undefined, "John");
+    let { response } = await createTemplate(undefined, [markdown], html);
+    expect(response._getStatusCode()).toBe(200);
+    const id = response._getJSONData()["id"];
+    const markdowns = { name: "John" };
+    response = await sendEmail(id, markdowns);
+    expect(response._getStatusCode()).toBe(200);
+    expect(response._getJSONData()).toEqual(expected);
   });
 });

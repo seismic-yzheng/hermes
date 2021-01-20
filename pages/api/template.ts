@@ -34,7 +34,6 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
     }
     return res.json({ id: id });
   } catch (e) {
-    console.log(e.message);
     res.status(500).json({ message: e.message });
   }
 };

@@ -45,7 +45,7 @@ const deleteTemplate = async (req, res) => {
   }
 };
 
-const getTemplateById = async (id: number) => {
+export const getTemplateById = async (id: number) => {
   let { statement, values } = buildStatementForQueryByID(templateTableName, id);
   return await query(statement, values);
 };
@@ -70,8 +70,8 @@ const getTemplate = async (req, res) => {
       return;
     }
     let result = results[0];
-    const markdown = await getMarkdown(result.id);
-    result["markdowns"] = markdown;
+    const markdowns = await getMarkdown(result.id);
+    result["markdowns"] = markdowns;
     return res.json(result);
   } catch (e) {
     res.status(500).json({ message: e.message });

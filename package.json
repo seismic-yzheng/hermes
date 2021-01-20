@@ -22,11 +22,13 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
     "@types/jest": "^26.0.19",
+    "@types/mustache": "^4.1.0",
     "@types/node": "^14.14.17",
     "@types/react": "^16.9.55",
     "@types/uuid": "^8.3.0",
     "dotenv": "^8.2.0",
     "jest": "^26.6.3",
+    "mustache": "^4.1.0",
     "node-mocks-http": "^1.9.0",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "^6.7.0",
