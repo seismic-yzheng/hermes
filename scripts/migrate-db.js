@@ -35,6 +35,7 @@ async function createTemplateTable() {
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(128) NOT NULL,
       html TEXT NOT NULL,
+      design JSON NOT NULL,
       creator VARCHAR(32) NOT NULL,
       likes INT NOT NULL DEFAULT 0,
       used INT NOT NULL DEFAULT 0,

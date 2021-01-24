@@ -1,4 +1,4 @@
-import Template from './template'
+import Template from "./template";
 
 function Templates({ templates }) {
   if (templates) {
@@ -10,10 +10,10 @@ function Templates({ templates }) {
           </div>
         ))}
       </div>
-    )
+    );
   } else {
-    return null
+    return null;
   }
 }
 
-export default Templates
+export default Templates;

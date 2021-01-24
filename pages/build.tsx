@@ -1,38 +1,46 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Button from '@/components/button'
+import React, { useRef, useState, useEffect } from "react";
+import Button from "@/components/button";
 
-import EmailEditor from 'react-email-editor';
-
+import EmailEditor from "react-email-editor";
 
 const App = (props) => {
-  const emailEditorRef = useRef(null)
-  const [submitting, setSubmitting] = useState(false)
+  const emailEditorRef = useRef(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const exportHtml = async (event: any) => {
-    setSubmitting(true)
-    event.preventDefault()
+    setSubmitting(true);
+    event.preventDefault();
     try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
-        const { design, html } = data
-        const res = await fetch('/api/template', {
-          method: 'POST',
+        const { design, html } = data;
+        console.log(design);
+        const sa = JSON.stringify({
+          name: "test",
+          creator: "user:1",
+          html: html,
+          design: design,
+        });
+        console.log(sa);
+        const res = await fetch("/api/template", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "name": "test",
-            "creator": "user:1",
-            "html": html
+            name: "test",
+            creator: "user:1",
+            html: html,
+            design: design,
           }),
-        })
-        setSubmitting(false)
-        const json = await res.json()
-        if (!res.ok) throw Error(json.message)
-      })
+        });
+        setSubmitting(false);
+        const json = await res.json();
+        if (!res.ok) throw Error(json.message);
+      });
     } catch (e) {
-      throw Error(e.message)
+      throw Error(e.message);
     }
-  }
+  };
 
   const onLoad = () => {
     // you can load your template here;
@@ -43,33 +51,30 @@ const App = (props) => {
   const [rendered, setRendered] = useState(false);
   useEffect(() => {
     setRendered(true),
-      () => { setRendered(false); }
+      () => {
+        setRendered(false);
+      };
   });
   var url;
 
   if (rendered) {
     if (window !== undefined) {
-      url = window.location.protocol + '//' + window.location.host;
+      url = window.location.protocol + "//" + window.location.host;
       console.log(url);
     }
     return (
       <div>
-        <div>
+        <EmailEditor ref={emailEditorRef} onLoad={onLoad} />
+        <div style={{ float: "right", marginTop: "10px" }}>
           <Button disabled={submitting} type="submit" onClick={exportHtml}>
-            {submitting ? 'Creating ...' : 'Create'}
+            {submitting ? "Creating ..." : "Create"}
           </Button>
         </div>
-
-        <EmailEditor
-          ref={emailEditorRef}
-          onLoad={onLoad}
-        />
       </div>
     );
-  }
-  else {
+  } else {
     return <p>Loading...</p>;
   }
 };
 
-export default App
+export default App;

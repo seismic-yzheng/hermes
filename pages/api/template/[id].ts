@@ -90,7 +90,12 @@ const updateTemplate = async (req, res) => {
       res.status(404).json({ message: "template not found" });
       return;
     }
-    const key_value = getColumnValue(req.body, ["name", "creator", "html"]);
+    const key_value = getColumnValue(req.body, [
+      "name",
+      "creator",
+      "html",
+      "design",
+    ]);
     let { statement, values } = buildStatementForUpdate(
       key_value,
       templateTableName,

@@ -1,12 +1,12 @@
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from "react-loading-skeleton";
 
-import Container from '@/components/container'
-import Templates from '@/components/templates'
+import Container from "@/components/container";
+import Templates from "@/components/templates";
 
-import { useTemplates } from '@/lib/swr-hooks'
+import { getTemplates } from "@/lib/swr-hooks";
 
 export default function EntriesPage() {
-  const { templates, isLoading } = useTemplates()
+  const { templateData, isLoading } = getTemplates();
 
   if (isLoading) {
     return (
@@ -22,14 +22,14 @@ export default function EntriesPage() {
           <Skeleton height={48} />
         </Container>
       </div>
-    )
+    );
   }
 
   return (
     <div>
       <Container>
-        <Templates templates={templates} />
+        <Templates templates={templateData} />
       </Container>
     </div>
-  )
+  );
 }

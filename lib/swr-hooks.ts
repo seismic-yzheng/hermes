@@ -1,19 +1,23 @@
-import useSWR from 'swr'
+import useSWR from "swr";
 
 function fetcher(url: string) {
-  return window.fetch(url).then((res) => res.json())
+  return window.fetch(url).then((res) => res.json());
 }
 
-export function useTemplates() {
-  const { data, error } = useSWR(`/api/get-templates`, fetcher)
-  console.log(data)
+export function getTemplate(id: string) {
+  const { data, error } = useSWR(`/api/template/${id}`, fetcher);
   return {
-    templates: data,
+    templateData: data,
     isLoading: !error && !data,
     isError: error,
-  }
+  };
 }
 
-export function useTemplate(id: string) {
-  return useSWR(`/api/get-template?id=${id}`, fetcher)
+export function getTemplates() {
+  const { data, error } = useSWR(`/api/templates/`, fetcher);
+  return {
+    templateData: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
 }

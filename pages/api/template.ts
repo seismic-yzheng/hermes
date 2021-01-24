@@ -12,14 +12,20 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
     res.status(405).end(`Method ${req.method} Not Allowed`);
     return;
   }
-  const { name, creator, html, markdowns } = req.body;
+  const { name, creator, html, design, markdowns } = req.body;
   try {
-    if (!name || !creator || !html) {
-      return res
-        .status(400)
-        .json({ message: "`name`, `creator` and `html` are required" });
+    if (!name || !creator || !html || !design) {
+      return res.status(400).json({
+        message: "`name`, `creator`, `html` and `design` are required",
+      });
     }
-    const key_value = getColumnValue(req.body, ["name", "creator", "html"]);
+    const key_value = getColumnValue(req.body, [
+      "name",
+      "creator",
+      "html",
+      "design",
+    ]);
+    console.log(req.body.design);
     const { statement, values } = buildStatementForInsert(
       key_value,
       templateTableName
