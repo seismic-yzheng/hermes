@@ -9,17 +9,16 @@ import Router from "next/router";
 function Template({ id, name, html }) {
   const [deleting, setDeleting] = useState(false);
 
-  async function deleteEntry() {
+  async function deleteTemplate() {
     setDeleting(true);
-    let res = await fetch(`/api/delete-template?id=${id}`, {
+    let res = await fetch(`/api/template/${id}`, {
       method: "DELETE",
     });
     let json = await res.json();
     if (!res.ok) throw Error(json.message);
-    mutate("/api/get-templates");
+    mutate("/api/templates/");
     setDeleting(false);
   }
-  async function editTemplate() {}
   return (
     <div>
       <div className="flex items-center">
@@ -27,7 +26,7 @@ function Template({ id, name, html }) {
         <div className="flex ml-4">
           <Button
             disabled={deleting}
-            onClick={deleteEntry}
+            onClick={deleteTemplate}
             className="h-5 py-0 mx-1"
           >
             {deleting ? "Deleting ..." : "Delete"}

@@ -15,9 +15,34 @@ export default function EditTemplate() {
   const { templateData, isLoading } = getTemplate(id as string);
   console.log(templateData, isLoading);
 
-  const exportHtml = async (event: any) => {
-    console.log(emailEditorRef);
+  const saveHtml = async (event: any) => {
+    setSubmitting(true);
+    event.preventDefault();
+    try {
+      emailEditorRef.current.editor.exportHtml(async (data: any) => {
+        const { design, html } = data;
+        const res = await fetch(`/api/template/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: "test",
+            creator: "user:1",
+            html: html,
+            design: design,
+          }),
+        });
+        setSubmitting(false);
+        const json = await res.json();
+        if (!res.ok) throw Error(json.message);
+        Router.push(`/templates`);
+      });
+    } catch (e) {
+      throw Error(e.message);
+    }
   };
+
   const onLoad = () => {
     console.log(emailEditorRef);
     console.log(testRef);
@@ -42,7 +67,7 @@ export default function EditTemplate() {
         >
           <span ref={testRef}>Template name: {templateData.name}</span>
           <span>
-            <Button disabled={submitting} type="submit" onClick={exportHtml}>
+            <Button disabled={submitting} type="submit" onClick={saveHtml}>
               {submitting ? "Saving ..." : "Save"}
             </Button>
           </span>
