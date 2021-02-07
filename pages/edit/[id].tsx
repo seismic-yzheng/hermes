@@ -1,22 +1,29 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "@/components/button";
+import Markdowns from "components/markdowns";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { getTemplate } from "../../lib/swr-hooks";
 import { useClientRouter } from "use-client-router";
 import Router from "next/router";
+import TopNavBar from "components/nav";
 
 import EmailEditor from "react-email-editor";
 
 export default function EditTemplate() {
   const emailEditorRef = useRef(null);
   const testRef = useRef(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [saving, setSaving] = useState(false);
   const router = useClientRouter();
   const { id } = router.query;
   const { templateData, isLoading } = getTemplate(id as string);
-  console.log(templateData, isLoading);
+  const [markdownList, setMarkdownList] = useState([
+    { name: "", type: "string", default_value: "" },
+  ]);
 
   const saveHtml = async (event: any) => {
-    setSubmitting(true);
+    setSaving(true);
     event.preventDefault();
     try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
@@ -27,13 +34,12 @@ export default function EditTemplate() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: "test",
-            creator: "user:1",
             html: html,
             design: design,
+            markdowns: markdownList,
           }),
         });
-        setSubmitting(false);
+        setSaving(false);
         const json = await res.json();
         if (!res.ok) throw Error(json.message);
         Router.push(`/templates`);
@@ -44,9 +50,9 @@ export default function EditTemplate() {
   };
 
   const onLoad = () => {
-    console.log(emailEditorRef);
-    console.log(testRef);
-    console.log(emailEditorRef.current);
+    if (templateData.markdowns && templateData.markdowns.length > 0) {
+      setMarkdownList(templateData.markdowns);
+    }
     if (emailEditorRef.current) {
       emailEditorRef.current.editor.loadDesign(JSON.parse(templateData.design));
     } else {
@@ -57,24 +63,20 @@ export default function EditTemplate() {
   if (!isLoading) {
     return (
       <div>
-        <div
-          style={{
-            backgroundColor: "red",
-            height: "35px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span ref={testRef}>Template name: {templateData.name}</span>
-          <span>
-            <Button disabled={submitting} type="submit" onClick={saveHtml}>
-              {submitting ? "Saving ..." : "Save"}
-            </Button>
-          </span>
-        </div>
-        <div>
-          <EmailEditor ref={emailEditorRef} onLoad={onLoad} />
-        </div>
+        <TopNavBar saveButton={saveHtml} saving={saving} />
+        <Container fluid>
+          <Row style={{ marginTop: "10px" }}>
+            <Col xs={6} md={4}>
+              <Markdowns
+                setMarkdownList={setMarkdownList}
+                markdownList={markdownList}
+              />
+            </Col>
+            <Col xs={6} md={8}>
+              <EmailEditor ref={emailEditorRef} onLoad={onLoad} />
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   } else {

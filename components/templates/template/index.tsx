@@ -2,9 +2,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { mutate } from "swr";
 
-import ButtonLink from "@/components/button-link";
-import Button from "@/components/button";
+import Button from "react-bootstrap/Button";
+import "bootstrap/dist/css/bootstrap.css";
 import Router from "next/router";
+import Nav from "react-bootstrap/Nav";
+import Card from "react-bootstrap/Card";
 
 function Template({ id, name, html }) {
   const [deleting, setDeleting] = useState(false);
@@ -21,25 +23,15 @@ function Template({ id, name, html }) {
   }
   return (
     <div>
-      <div className="flex items-center">
-        <div>{name}</div>
-        <div className="flex ml-4">
-          <Button
-            disabled={deleting}
-            onClick={deleteTemplate}
-            className="h-5 py-0 mx-1"
-          >
-            {deleting ? "Deleting ..." : "Delete"}
-          </Button>
-          <Button
-            onClick={() => Router.push(`/edit/${id}`)}
-            className="h-5 py-0 mx-1"
-          >
-            EDIT
-          </Button>
-        </div>
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <Card>
+        <Card.Body>
+          <Card.Title>{name}</Card.Title>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <Card.Link href={`/edit/${id}`}>Edit</Card.Link>
+          <Card.Link href={`/send/${id}`}>Send</Card.Link>
+          <Card.Link onClick={deleteTemplate}>Delete</Card.Link>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

@@ -8,81 +8,97 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Markdowns = (props) => {
-  const inputList = props.inputList;
-  const setInputList = props.setInputList;
-  console.log(inputList);
+  const markdownList = props.markdownList ? props.markdownList : [];
+  const setMarkdownList = props.setMarkdownList;
 
   // handle input change
-  const handleInputChange = (e, index) => {
+  const handleMarkdownChange = (e, index) => {
     const { name, value } = e.target;
-    const list = [...inputList];
-    list[index][name] = value;
-    setInputList(list);
+    const list = [...markdownList];
+    list[index]["name"] = value;
+    setMarkdownList(list);
+  };
+
+  const handleDefaultValueChange = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...markdownList];
+    list[index]["default_value"] = value;
+    setMarkdownList(list);
   };
 
   // handle click event of the Remove button
-  const handleRemoveClick = (index) => {
-    const list = [...inputList];
+  const handleMarkDownRemoveClick = (index) => {
+    const list = [...markdownList];
     list.splice(index, 1);
-    setInputList(list);
+    setMarkdownList(list);
   };
 
   // handle click event of the Add button
-  const handleAddClick = () => {
-    setInputList([...inputList, { markdown: "", type: "String" }]);
+  const handleMarkdownAddClick = () => {
+    setMarkdownList([
+      ...markdownList,
+      { name: "", type: "string", default_value: "" },
+    ]);
   };
 
-  const handleSelect = (e, index) => {
-    console.log(e);
-    const list = [...inputList];
+  const handleMarkdownSelect = (e, index) => {
+    const list = [...markdownList];
     list[index]["type"] = e;
-    setInputList(list);
+    setMarkdownList(list);
   };
 
   return (
     <div>
-      {inputList.map((x, i) => (
+      {markdownList.map((x, i) => (
         <div className="box" key={i}>
           <InputGroup className="mb-3">
             <FormControl
               placeholder="Markdown"
               aria-label="Markdown"
               aria-describedby="basic-addon2"
-              onChange={(e) => handleInputChange(e, i)}
+              value={markdownList[i]["name"]}
+              onChange={(e) => handleMarkdownChange(e, i)}
+            />
+            <FormControl
+              placeholder="Default value"
+              aria-label="Default value"
+              aria-describedby="basic-addon2"
+              value={markdownList[i]["default_value"]}
+              onChange={(e) => handleDefaultValueChange(e, i)}
             />
             <DropdownButton
               as={InputGroup.Prepend}
               variant="outline-secondary"
-              title="String"
+              title={markdownList[i]["type"]}
               id="input-group-dropdown-1"
               data-toggle="dropdown"
-              onSelect={(e) => handleSelect(e, i)}
+              onSelect={(e) => handleMarkdownSelect(e, i)}
             >
               <Dropdown>
                 <Dropdown.Item href="#" eventKey="string">
-                  String
+                  string
                 </Dropdown.Item>
                 <Dropdown.Item href="#" eventKey="dict">
-                  Object
+                  dict
                 </Dropdown.Item>
                 <Dropdown.Item href="#" eventKey="list">
-                  List
+                  list
                 </Dropdown.Item>
               </Dropdown>
             </DropdownButton>
             <InputGroup.Append>
-              {inputList.length !== 1 && (
+              {markdownList.length !== 1 && (
                 <Button
                   variant="outline-secondary"
-                  onClick={() => handleRemoveClick(i)}
+                  onClick={() => handleMarkDownRemoveClick(i)}
                 >
                   Remove
                 </Button>
               )}
-              {inputList.length - 1 === i && (
+              {markdownList.length - 1 === i && (
                 <Button
                   variant="outline-secondary"
-                  onClick={() => handleAddClick()}
+                  onClick={() => handleMarkdownAddClick()}
                 >
                   Add
                 </Button>
@@ -91,7 +107,7 @@ const Markdowns = (props) => {
           </InputGroup>
         </div>
       ))}
-      <div style={{ marginTop: 20 }}>{JSON.stringify(inputList)}</div>
+      <div style={{ marginTop: 20 }}>{JSON.stringify(markdownList)}</div>
     </div>
   );
 };

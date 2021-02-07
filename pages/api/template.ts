@@ -25,7 +25,6 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
       "html",
       "design",
     ]);
-    console.log(req.body.design);
     const { statement, values } = buildStatementForInsert(
       key_value,
       templateTableName
@@ -35,7 +34,9 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
     if (markdowns) {
       for (const markdown of markdowns) {
         const { name, type, default_value } = markdown;
-        await storeMarkdown(name, type, id, default_value);
+        if (name) {
+          await storeMarkdown(name, type, id, default_value);
+        }
       }
     }
     return res.json({ id: id });

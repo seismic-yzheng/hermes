@@ -1,7 +1,10 @@
 import Skeleton from "react-loading-skeleton";
 
-import Container from "@/components/container";
 import Templates from "@/components/templates";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import TopNavBar from "components/nav";
 
 import { getTemplates } from "@/lib/swr-hooks";
 
@@ -9,26 +12,16 @@ export default function EntriesPage() {
   const { templateData, isLoading } = getTemplates();
 
   if (isLoading) {
-    return (
-      <div>
-        <Container>
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-          <div className="my-4" />
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-          <div className="my-4" />
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-        </Container>
-      </div>
-    );
+    return <div>loading</div>;
   }
 
   return (
     <div>
+      <TopNavBar />
       <Container>
-        <Templates templates={templateData} />
+        <Row>
+          <Templates templates={templateData} />
+        </Row>
       </Container>
     </div>
   );

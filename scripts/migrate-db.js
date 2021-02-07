@@ -69,7 +69,7 @@ async function createMarkdownTable() {
     CREATE TABLE IF NOT EXISTS template_markdown (
       template_id INT NOT NULL,
       markdown_id INT NOT NULL,
-      default_value VARCHAR(128),
+      default_value VARCHAR(128) DEFAULT NULL,
       PRIMARY KEY (template_id, markdown_id),
       FOREIGN KEY (template_id) REFERENCES template(id),
       FOREIGN KEY (markdown_id) REFERENCES markdown(id)
