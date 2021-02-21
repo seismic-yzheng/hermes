@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Markdowns from "components/markdowns";
+import Markdowns from "@/components/markdowns/edit";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -75,7 +75,7 @@ const App = (props) => {
         />
         <TemplateSaveWindow
           show={saveWindowShow}
-          onHide={() => setSaveWindowShow(false)}
+          setShow={setSaveWindowShow}
           saveTemplate={exportHtml}
         />
         <Container fluid>

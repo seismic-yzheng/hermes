@@ -12,6 +12,7 @@ import {
   deleteMarkdown,
   storeMarkdown,
 } from "../../../lib/markdown";
+import { getTemplateById } from "../../../lib/template";
 
 const validID = async (id: number) => {
   if (!id) {
@@ -43,11 +44,6 @@ const deleteTemplate = async (req, res) => {
     res.status(500).json({ message: e.message });
     return;
   }
-};
-
-export const getTemplateById = async (id: number) => {
-  let { statement, values } = buildStatementForQueryByID(templateTableName, id);
-  return await query(statement, values);
 };
 
 const validateTemplateByID = async (id: number) => {

@@ -19,9 +19,7 @@ export default function EntriesPage() {
     <div>
       <TopNavBar />
       <Container>
-        <Row>
-          <Templates templates={templateData} />
-        </Row>
+        <Templates templates={templateData} />
       </Container>
     </div>
   );

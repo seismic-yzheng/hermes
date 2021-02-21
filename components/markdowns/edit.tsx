@@ -49,6 +49,9 @@ const Markdowns = (props) => {
 
   return (
     <div>
+      <h3>
+        <a href="https://mustache.github.io/">Mustache</a> markdowns
+      </h3>
       {markdownList.map((x, i) => (
         <div className="box" key={i}>
           <InputGroup className="mb-3">
@@ -107,7 +110,6 @@ const Markdowns = (props) => {
           </InputGroup>
         </div>
       ))}
-      <div style={{ marginTop: 20 }}>{JSON.stringify(markdownList)}</div>
     </div>
   );
 };

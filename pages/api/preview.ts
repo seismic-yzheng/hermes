@@ -9,8 +9,6 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
   }
   try {
     const rendered = await render(req.body["id"], req.body["markdowns"]);
-    const recipients = req.body["recipients"];
-    console.log(recipients);
     if (!rendered) {
       res.status(404).json({ message: "template not found" });
     }

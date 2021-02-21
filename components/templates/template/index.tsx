@@ -22,17 +22,15 @@ function Template({ id, name, html }) {
     setDeleting(false);
   }
   return (
-    <div>
-      <Card>
-        <Card.Body>
-          <Card.Title>{name}</Card.Title>
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-          <Card.Link href={`/edit/${id}`}>Edit</Card.Link>
-          <Card.Link href={`/send/${id}`}>Send</Card.Link>
-          <Card.Link onClick={deleteTemplate}>Delete</Card.Link>
-        </Card.Body>
-      </Card>
-    </div>
+    <Card>
+      <Card.Body>
+        <Card.Title>{name}</Card.Title>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+        <Card.Link href={`/edit/${id}`}>Edit</Card.Link>
+        <Card.Link href={`/send/${id}`}>Send</Card.Link>
+        <Card.Link onClick={deleteTemplate}>Delete</Card.Link>
+      </Card.Body>
+    </Card>
   );
 }
 
