@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
 import { render } from "../../lib/template";
+import { sendEmail } from "../../lib/helper";
 
 const sendEmailHandler: NextApiHandler = async (req, res) => {
   if (req.method != "POST") {
@@ -14,6 +15,8 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     if (!rendered) {
       res.status(404).json({ message: "template not found" });
     }
+    const fake_sender = "test@test.com";
+    await sendEmail(fake_sender, recipients, "", rendered);
     return res.json(rendered);
   } catch (e) {
     console.log(e);
