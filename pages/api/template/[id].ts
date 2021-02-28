@@ -91,7 +91,10 @@ const updateTemplate = async (req, res) => {
       "creator",
       "html",
       "design",
+      "subject",
     ]);
+    console.log(key_value["subject"]);
+    console.log(req.body["markdowns"]);
     let { statement, values } = buildStatementForUpdate(
       key_value,
       templateTableName,
@@ -102,14 +105,16 @@ const updateTemplate = async (req, res) => {
       await deleteMarkdown(id);
       for (const markdown of req.body["markdowns"]) {
         const { name, type, default_value } = markdown;
-        await storeMarkdown(name, type, id, default_value);
+        if (name) {
+          await storeMarkdown(name, type, id, default_value);
+        }
       }
     }
 
     res.status(200).json({ message: "template updated" });
     return;
   } catch (e) {
-    console.log(e.message);
+    console.error(e);
     res.status(500).json({ message: e.message });
     return;
   }

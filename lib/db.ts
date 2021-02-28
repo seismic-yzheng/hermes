@@ -129,13 +129,17 @@ export function buildStatementForInsert(key_value: {}, table: string) {
   let statement = "INSERT INTO ";
   statement += table;
   let values = [] as string[];
+  let keys = [] as string[];
   let attrs = [] as string[];
   Object.keys(key_value).forEach((key) => {
-    attrs.push("?");
-    values.push(filter.clean(String(key_value[key])));
+    if (String(key_value[key])) {
+      attrs.push("?");
+      keys.push(key);
+      values.push(filter.clean(String(key_value[key])));
+    }
   });
   statement += " ( ";
-  statement += Object.keys(key_value).join(",");
+  statement += keys.join(",");
   statement += " ) VALUES ( ";
   statement += attrs.join(",");
   statement += " )";

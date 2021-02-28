@@ -36,6 +36,7 @@ async function createTemplateTable() {
       name VARCHAR(128) NOT NULL,
       html TEXT NOT NULL,
       design JSON NOT NULL,
+      subject TEXT DEFAULT NULL,
       creator VARCHAR(32) NOT NULL,
       likes INT NOT NULL DEFAULT 0,
       used INT NOT NULL DEFAULT 0,

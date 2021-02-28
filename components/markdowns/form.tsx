@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
 import "bootstrap/dist/css/bootstrap.css";
+import Alert from "react-bootstrap/Alert";
 
 const MarkdownForms = (props) => {
   const markdownValue = props.markdownValue;
   const markdowns = props.markdowns;
 
   const setMarkdowns = props.setMarkdowns;
-  //console.log(temp);
-  // const [changeMarkdowns, setChangeMarkdowns] = useState(temp);
-  //useEffect(() => {
-  //  setMarkdowns(temp);
-  //});
 
   const handleMarkdownChange = (e, index) => {
     const { name, value } = e.target;
-    //const list = { ...changeMarkdowns };
-    //list[markdownValue[index]["name"]] = value;
-    // setChangeMarkdowns(list);
     const temp = { ...markdowns };
     temp[markdownValue[index]["name"]] = value;
     console.log(temp);
@@ -35,9 +23,10 @@ const MarkdownForms = (props) => {
     console.log(markdownValue);
     return (
       <div>
-        <h3>
-          <a href="https://mustache.github.io/">Mustache</a> markdowns
-        </h3>
+        <Alert variant="secondary">
+          <Alert.Link href="https://mustache.github.io/">Mustache</Alert.Link>{" "}
+          markdowns.
+        </Alert>
         {markdownValue.length == 0 ? (
           <p>no markdown found</p>
         ) : (

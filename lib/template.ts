@@ -44,16 +44,31 @@ export function validAndMergeMarkdowns(
   return res;
 }
 
-export async function render(template_id: number, markdowns: any[]) {
+export async function render(
+  template_id: number,
+  markdowns: any[],
+  subject: string
+) {
   const results = (await getTemplateById(template_id)) as any[];
   if (results.length == 0) {
     return null;
   }
   const result = results[0];
   const stored_markdowns = (await getMarkdown(result.id)) as any[];
-  const a = apply(
-    result.html,
-    validAndMergeMarkdowns(markdowns, stored_markdowns)
-  );
-  return a;
+  const validMarkDowns = validAndMergeMarkdowns(markdowns, stored_markdowns);
+  let emailSubject = subject ? subject : result.subject;
+  if (!emailSubject) {
+    emailSubject = "No subject";
+  }
+
+  return {
+    html: apply(
+      result.html,
+      validAndMergeMarkdowns(markdowns, stored_markdowns)
+    ),
+    subject: apply(
+      emailSubject,
+      validAndMergeMarkdowns(markdowns, stored_markdowns)
+    ),
+  };
 }

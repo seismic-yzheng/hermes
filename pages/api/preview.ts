@@ -7,8 +7,9 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     res.status(405).end(`Method ${req.method} Not Allowed`);
     return;
   }
+  const { id, markdowns, subject } = req.body;
   try {
-    const rendered = await render(req.body["id"], req.body["markdowns"]);
+    const rendered = await render(id, markdowns, subject);
     if (!rendered) {
       res.status(404).json({ message: "template not found" });
     }

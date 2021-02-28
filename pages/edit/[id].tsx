@@ -8,6 +8,7 @@ import { getTemplate } from "../../lib/swr-hooks";
 import { useClientRouter } from "use-client-router";
 import Router from "next/router";
 import TopNavBar from "components/nav";
+import Subject from "components/subject";
 
 import EmailEditor from "react-email-editor";
 
@@ -21,6 +22,7 @@ export default function EditTemplate() {
   const [markdownList, setMarkdownList] = useState([
     { name: "", type: "string", default_value: "" },
   ]);
+  const [subject, setSubject] = useState("");
 
   const saveHtml = async (event: any) => {
     setSaving(true);
@@ -28,6 +30,7 @@ export default function EditTemplate() {
     try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
         const { design, html } = data;
+        console.log(subject);
         const res = await fetch(`/api/template/${id}`, {
           method: "PUT",
           headers: {
@@ -37,6 +40,7 @@ export default function EditTemplate() {
             html: html,
             design: design,
             markdowns: markdownList,
+            subject: subject,
           }),
         });
         setSaving(false);
@@ -53,6 +57,7 @@ export default function EditTemplate() {
     if (templateData.markdowns && templateData.markdowns.length > 0) {
       setMarkdownList(templateData.markdowns);
     }
+    setSubject(templateData.subject);
     if (emailEditorRef.current) {
       emailEditorRef.current.editor.loadDesign(JSON.parse(templateData.design));
     } else {
@@ -67,6 +72,8 @@ export default function EditTemplate() {
         <Container fluid>
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
+              <Subject setSubject={setSubject} subject={subject} />
+              <hr />
               <Markdowns
                 setMarkdownList={setMarkdownList}
                 markdownList={markdownList}

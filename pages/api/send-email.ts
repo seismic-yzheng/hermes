@@ -9,15 +9,18 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     return;
   }
   try {
-    const rendered = await render(req.body["id"], req.body["markdowns"]);
-    const recipients = req.body["recipients"];
-    console.log(recipients);
+    const { id, markdowns, subject } = req.body;
+    const rendered = await await render(id, markdowns, subject);
     if (!rendered) {
       res.status(404).json({ message: "template not found" });
     }
+    const recipients = req.body["recipients"];
+    const html = rendered["html"];
+    const emailSubject = rendered["subject"];
+    console.log(recipients);
     const fake_sender = "test@test.com";
-    await sendEmail(fake_sender, recipients, "", rendered);
-    return res.json(rendered);
+    await sendEmail(fake_sender, recipients, emailSubject, html);
+    return res.json("ok");
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: e.message });

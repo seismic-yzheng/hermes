@@ -9,6 +9,10 @@ import MarkdownForms from "components/markdowns/form";
 import ServerErrorWindow from "components/window/server-error";
 import Router from "next/router";
 import EmailSendWindow from "components/window/send";
+import Subject from "components/subject";
+import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 
 export default function EditTemplate() {
   const [previewing, setPreviewing] = useState(false);
@@ -18,10 +22,11 @@ export default function EditTemplate() {
   const { templateData, isLoading } = getTemplate(id as string);
   const [markdowns, setMarkdowns] = useState(undefined);
   const [sendWindowShow, setSendWindowShow] = useState(false);
-  const [html, setHTML] = useState(
-    "<p>Press preview button to see preview.</p>"
-  );
+  const [html, setHTML] = useState(undefined);
+  const [previewSubject, setPreviewSubject] = useState("");
   const [errorWindowShow, setErrorWindowShow] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [previewed, setPreviewed] = useState(false);
 
   const preview = async (event: any) => {
     setPreviewing(true);
@@ -34,14 +39,18 @@ export default function EditTemplate() {
       body: JSON.stringify({
         id: id,
         markdowns: markdowns,
+        subject: subject,
       }),
     });
-    const text = await res.text();
     setPreviewing(false);
     if (!res.ok) {
       setErrorWindowShow(true);
     } else {
-      setHTML(text);
+      const res_json = await res.json();
+      console.log(res_json);
+      setHTML(res_json["html"]);
+      setPreviewSubject(res_json["subject"]);
+      setPreviewed(true);
     }
   };
 
@@ -57,6 +66,7 @@ export default function EditTemplate() {
         id: id,
         markdowns: markdowns,
         recipients: recipients,
+        subject: subject,
       }),
     });
     setSending(false);
@@ -78,6 +88,10 @@ export default function EditTemplate() {
         }
       });
       setMarkdowns(temp);
+      console.log(templateData.subject);
+      if (templateData.subject) {
+        setSubject(templateData.subject);
+      }
     }
     return (
       <div>
@@ -99,6 +113,8 @@ export default function EditTemplate() {
         <Container fluid>
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
+              <Subject setSubject={setSubject} subject={subject} />
+              <hr />
               <MarkdownForms
                 markdownValue={templateData.markdowns}
                 markdowns={markdowns}
@@ -107,8 +123,24 @@ export default function EditTemplate() {
               />
             </Col>
             <Col xs={6} md={8}>
-              <h3 style={{ textAlign: "center" }}>Preview</h3>
-              <div dangerouslySetInnerHTML={{ __html: html }} />
+              {!previewed && <p>Press preview button to see preview.</p>}
+              {previewed && (
+                <Form>
+                  <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Subject</Form.Label>
+                    <FormControl
+                      aria-label="Subject"
+                      aria-describedby="basic-addon2"
+                      value={previewSubject}
+                      readOnly
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Body</Form.Label>
+                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                  </Form.Group>
+                </Form>
+              )}
             </Col>
           </Row>
         </Container>

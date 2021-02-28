@@ -24,11 +24,14 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
       "creator",
       "html",
       "design",
+      "subject",
     ]);
+    console.log(key_value);
     const { statement, values } = buildStatementForInsert(
       key_value,
       templateTableName
     );
+    console.log(statement, values);
     const results = await query(statement, values);
     const id = results["insertId"];
     if (markdowns) {
@@ -41,6 +44,7 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
     }
     return res.json({ id: id });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ message: e.message });
   }
 };

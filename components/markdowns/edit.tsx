@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -49,9 +49,10 @@ const Markdowns = (props) => {
 
   return (
     <div>
-      <h3>
-        <a href="https://mustache.github.io/">Mustache</a> markdowns
-      </h3>
+      <Alert variant="secondary">
+        <Alert.Link href="https://mustache.github.io/">Mustache</Alert.Link>{" "}
+        markdowns.
+      </Alert>
       {markdownList.map((x, i) => (
         <div className="box" key={i}>
           <InputGroup className="mb-3">

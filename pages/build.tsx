@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import TopNavBar from "components/nav";
 import TemplateSaveWindow from "components/window/template-save";
+import Subject from "components/subject";
 
 import EmailEditor from "react-email-editor";
 import Router from "next/router";
@@ -13,6 +14,7 @@ import Router from "next/router";
 const App = (props) => {
   const emailEditorRef = useRef(null);
   const [creating, setCreating] = useState(false);
+  const [subject, setSubject] = useState("");
   const [markdownList, setMarkdownList] = useState([
     { name: "", type: "string", default_value: "" },
   ]);
@@ -36,6 +38,7 @@ const App = (props) => {
             html: html,
             design: design,
             markdowns: markdownList,
+            subject: subject,
           }),
         });
         setCreating(false);
@@ -81,6 +84,8 @@ const App = (props) => {
         <Container fluid>
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
+              <Subject setSubject={setSubject} subject={subject} />
+              <hr />
               <Markdowns
                 setMarkdownList={setMarkdownList}
                 markdownList={markdownList}

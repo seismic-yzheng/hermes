@@ -15,7 +15,7 @@ function Templates({ templates }) {
           className="show-gird"
         >
           {templates.map((e) => (
-            <Col style={{ textAlign: "center", marginTop: 50 }}>
+            <Col key={e.id} style={{ textAlign: "center", marginTop: 50 }}>
               <Template id={e.id} name={e.name} html={e.html} />
             </Col>
           ))}
