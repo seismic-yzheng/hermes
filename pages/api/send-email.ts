@@ -17,9 +17,8 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     const recipients = req.body["recipients"];
     const html = rendered["html"];
     const emailSubject = rendered["subject"];
-    console.log(recipients);
     const fake_sender = "test@test.com";
-    await sendEmail(fake_sender, recipients, emailSubject, html);
+    // await sendEmail(fake_sender, recipients, emailSubject, html);
     return res.json("ok");
   } catch (e) {
     console.log(e);

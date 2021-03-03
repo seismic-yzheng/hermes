@@ -41,6 +41,19 @@ export function getColumnValue(key_value: object, columns: string[]) {
   return res;
 }
 
+export function getColumnValueForSearch(key_value: object, columns: object) {
+  let res = {};
+  Object.keys(columns).forEach((key) => {
+    if (key in key_value) {
+      res[columns[key]["col"]] = {
+        value: key_value[key],
+        include: columns[key]["include"],
+      };
+    }
+  });
+  return res;
+}
+
 export function buildStatementForUpdate(
   key_value: {},
   table: string,
@@ -75,17 +88,25 @@ export function buildStatementForQuery(
   let values = [] as string[];
   let attrs = [] as string[];
   Object.keys(key_value).forEach((key) => {
-    let col_val = key_value[key];
-    if (col_val instanceof Array) {
+    let { value, include } = key_value[key];
+    if (value instanceof Array) {
       let sub_attrs = [] as string[];
-      col_val.forEach((item) => {
+      value.forEach((item) => {
         sub_attrs.push("?");
         values.push(filter.clean(String(item)));
       });
-      attrs.push(key + " in (" + sub_attrs.join(",") + ")");
+      if (include) {
+        attrs.push(key + " in (" + sub_attrs.join(",") + ")");
+      } else {
+        attrs.push(key + " not in (" + sub_attrs.join(",") + ")");
+      }
     } else {
-      attrs.push(key + "= ?");
-      values.push(filter.clean(String(col_val)));
+      if (include) {
+        attrs.push(key + "= ?");
+      } else {
+        attrs.push(key + "!= ?");
+      }
+      values.push(filter.clean(String(value)));
     }
   });
   if (attrs.length > 0) {
@@ -115,6 +136,25 @@ export function buildStatementForQueryByID(table: string, id: number) {
   statement += " WHERE id = ?";
   let values = [filter.clean(String(id))];
   return { statement: statement, values: values };
+}
+
+export async function getTemplateMarkdownByIDs(
+  template_id: any,
+  markdown_id: any
+) {
+  let statement =
+    "SELECT * FROM template_markdown WHERE template_id = ? AND markdown_id = ?";
+  let values = [
+    filter.clean(String(template_id)),
+    filter.clean(String(markdown_id)),
+  ];
+  return await query(statement, values);
+}
+
+export async function getMarkdownByNameAndType(name: any, type: any) {
+  let statement = "SELECT * FROM markdown WHERE name = ? AND type = ?";
+  let values = [filter.clean(String(name)), filter.clean(String(type))];
+  return await query(statement, values);
 }
 
 export function buildStatementForDelete(table: string, id: number) {

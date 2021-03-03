@@ -30,7 +30,6 @@ export default function EditTemplate() {
 
   const preview = async (event: any) => {
     setPreviewing(true);
-    console.log(markdowns);
     const res = await fetch("/api/preview", {
       method: "POST",
       headers: {
@@ -47,7 +46,6 @@ export default function EditTemplate() {
       setErrorWindowShow(true);
     } else {
       const res_json = await res.json();
-      console.log(res_json);
       setHTML(res_json["html"]);
       setPreviewSubject(res_json["subject"]);
       setPreviewed(true);
@@ -56,7 +54,6 @@ export default function EditTemplate() {
 
   const send = async (event: any, recipients: string) => {
     setSending(true);
-    console.log(recipients);
     const res = await fetch("/api/send-email", {
       method: "POST",
       headers: {
@@ -88,7 +85,6 @@ export default function EditTemplate() {
         }
       });
       setMarkdowns(temp);
-      console.log(templateData.subject);
       if (templateData.subject) {
         setSubject(templateData.subject);
       }

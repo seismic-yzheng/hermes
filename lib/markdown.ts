@@ -1,28 +1,24 @@
 import {
   query,
-  buildStatementForQuery,
+  getMarkdownByNameAndType,
   buildStatementForInsert,
-  getColumnValue,
-  buildStatementForUpdate,
+  getTemplateMarkdownByIDs,
 } from "./db";
 import { templateMarkdownTableName, markdownTableName } from "./constants";
 import Filter from "bad-words";
 
 const filter = new Filter();
 
-async function getMarkdownID(name: string, type: string) {
-  const key_value = { name: name, type: type };
+async function getOrCreateMarkdown(name: string, type: string) {
   let id: string;
-  let { statement, values } = buildStatementForQuery(
-    key_value,
-    markdownTableName
-  );
-  let results = await query(statement, values);
+  let results = await getMarkdownByNameAndType(name, type);
+  console.log(results);
   if (Object.keys(results).length == 0) {
     let { statement, values } = buildStatementForInsert(
-      key_value,
+      { name: name, type: type },
       markdownTableName
     );
+    console.log(statement, values);
     results = await query(statement, values);
     id = results["insertId"];
   } else {
@@ -31,23 +27,26 @@ async function getMarkdownID(name: string, type: string) {
   return id;
 }
 
-async function insertMarkdown(
+async function storeTemplateMarkdown(
   markdown_id: number,
   template_id: number,
   default_value = undefined
 ) {
-  let key_value = {
-    template_id: template_id,
-    markdown_id: markdown_id,
-  };
-  if (default_value) {
-    key_value["default_value"] = default_value;
+  const res = await getTemplateMarkdownByIDs(template_id, markdown_id);
+  if (Object.keys(res).length == 0) {
+    let key_value = {
+      template_id: template_id,
+      markdown_id: markdown_id,
+    };
+    if (default_value) {
+      key_value["default_value"] = default_value;
+    }
+    let { statement, values } = buildStatementForInsert(
+      key_value,
+      templateMarkdownTableName
+    );
+    return await query(statement, values);
   }
-  let { statement, values } = buildStatementForInsert(
-    key_value,
-    templateMarkdownTableName
-  );
-  return await query(statement, values);
 }
 
 export async function storeMarkdown(
@@ -56,10 +55,9 @@ export async function storeMarkdown(
   template_id: number,
   default_value = undefined
 ) {
-  const markdown_id = (await getMarkdownID(name, type)) as any;
-  return await insertMarkdown(markdown_id, template_id, default_value)[
-    "insertId"
-  ];
+  console.log(name, type);
+  const markdown_id = (await getOrCreateMarkdown(name, type)) as any;
+  await storeTemplateMarkdown(markdown_id, template_id, default_value);
 }
 
 async function updateDefaultValue(default_value) {

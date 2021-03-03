@@ -93,8 +93,6 @@ const updateTemplate = async (req, res) => {
       "design",
       "subject",
     ]);
-    console.log(key_value["subject"]);
-    console.log(req.body["markdowns"]);
     let { statement, values } = buildStatementForUpdate(
       key_value,
       templateTableName,

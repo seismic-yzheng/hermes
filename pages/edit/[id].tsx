@@ -30,7 +30,6 @@ export default function EditTemplate() {
     try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
         const { design, html } = data;
-        console.log(subject);
         const res = await fetch(`/api/template/${id}`, {
           method: "PUT",
           headers: {

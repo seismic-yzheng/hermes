@@ -1,5 +1,9 @@
 import { NextApiHandler } from "next";
-import { query, buildStatementForQuery, getColumnValue } from "../../lib/db";
+import {
+  query,
+  buildStatementForQuery,
+  getColumnValueForSearch,
+} from "../../lib/db";
 import { getOrderBy, getSortBy, getLimit, getOffset } from "../../lib/request";
 import { templateTableName } from "../../lib/constants";
 import { getMarkdown } from "../../lib/markdown";
@@ -15,7 +19,14 @@ const templatesHandler: NextApiHandler = async (req, res) => {
     const sort_by = getSortBy(req);
     const limit = getLimit(req);
     const offset = getOffset(req);
-    const key_value = getColumnValue(req.query, ["id", "name", "creator"]);
+    const key_value = getColumnValueForSearch(req.query, {
+      ids: { col: "id", include: true },
+      exclude_ids: { col: "id", include: false },
+      names: { col: "name", include: true },
+      exclude_names: { col: "name", include: false },
+      creators: { col: "creator", include: true },
+      exclude_creators: { col: "creator", include: false },
+    });
     let { statement, values } = buildStatementForQuery(
       key_value,
       templateTableName,
