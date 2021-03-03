@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
 import Container from "react-bootstrap/Container";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 export default function TopNavbar(props) {
   const createButton = props.createButton;
@@ -18,7 +19,12 @@ export default function TopNavbar(props) {
       <Container fluid>
         <Navbar.Brand href="/">Hermes</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/templates">Templates</Nav.Link>
+          <NavDropdown title="Templates" id="collasible-nav-dropdown">
+            <NavDropdown.Item href="/templates?user=current">
+              My Templates
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/templates">All Templates</NavDropdown.Item>
+          </NavDropdown>
           <Nav.Link href="/build">Build</Nav.Link>
         </Nav>
         {createButton && (

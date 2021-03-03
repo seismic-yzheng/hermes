@@ -13,10 +13,13 @@ export function getTemplate(id: string) {
   };
 }
 
-export function getTemplates() {
-  const { data, error } = useSWR(`/api/templates/`, fetcher);
+export function getTemplates(params: any = {}) {
+  const { data, error } = useSWR(
+    `/api/templates/?` + new URLSearchParams(params).toString(),
+    fetcher
+  );
   return {
-    templateData: data,
+    data: data,
     isLoading: !error && !data,
     isError: error,
   };

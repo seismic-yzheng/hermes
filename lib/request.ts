@@ -32,12 +32,12 @@ export function getSortBy(req) {
 
 export function validateSortBy(sort_by: string) {
   if (!["DESC", "ASC"].includes(sort_by)) {
-    throw new Error("invalid sort");
+    throw new Error("invalid sort: " + sort_by);
   }
 }
 
 export function validateOrderBy(order_by: string, allowed: string[]) {
   if (!allowed.includes(order_by)) {
-    throw new Error("invalid order");
+    throw new Error("invalid order: " + order_by);
   }
 }
