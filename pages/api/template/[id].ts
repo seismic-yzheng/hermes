@@ -2,16 +2,20 @@ import { NextApiHandler } from "next";
 import {
   query,
   buildStatementForUpdate,
-  buildStatementForQueryByID,
   buildStatementForDelete,
   getColumnValue,
 } from "../../../lib/db";
 import { templateTableName } from "../../../lib/constants";
 import {
-  getMarkdown,
-  deleteMarkdown,
-  storeMarkdown,
+  getMarkdownForTemplate,
+  deleteMarkdownByTemplate,
+  storeMarkdownForTemplate,
 } from "../../../lib/markdown";
+import {
+  deleteCategoryByTemplate,
+  storeCategoryForTemplate,
+  getCategoryForTemplate,
+} from "../../../lib/category";
 import { getTemplateById } from "../../../lib/template";
 
 const validID = async (id: number) => {
@@ -34,7 +38,8 @@ const deleteTemplate = async (req, res) => {
       res.status(404).json({ message: "template not found" });
       return;
     }
-    await deleteMarkdown(id);
+    await deleteMarkdownByTemplate(id);
+    await deleteCategoryByTemplate(id);
     let { statement, values } = buildStatementForDelete(templateTableName, id);
     await query(statement, values);
 
@@ -66,8 +71,10 @@ const getTemplate = async (req, res) => {
       return;
     }
     let result = results[0];
-    const markdowns = await getMarkdown(result.id);
+    const markdowns = await getMarkdownForTemplate(result.id);
+    const categories = await getCategoryForTemplate(result.id);
     result["markdowns"] = markdowns;
+    result["categories"] = categories;
     return res.json(result);
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -100,12 +107,18 @@ const updateTemplate = async (req, res) => {
     );
     await query(statement, values);
     if ("markdowns" in req.body) {
-      await deleteMarkdown(id);
+      await deleteMarkdownByTemplate(id);
       for (const markdown of req.body["markdowns"]) {
         const { name, type, default_value } = markdown;
         if (name) {
-          await storeMarkdown(name, type, id, default_value);
+          await storeMarkdownForTemplate(name, type, id, default_value);
         }
+      }
+    }
+    if ("categories" in req.body) {
+      await deleteCategoryByTemplate(id);
+      for (const category of req.body["categories"]) {
+        await storeCategoryForTemplate(category, id);
       }
     }
 

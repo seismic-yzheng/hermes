@@ -72,14 +72,17 @@ export default function EditTemplate() {
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
               <Subject setSubject={setSubject} subject={subject} />
-              <hr />
               <Markdowns
                 setMarkdownList={setMarkdownList}
                 markdownList={markdownList}
               />
             </Col>
             <Col xs={6} md={8}>
-              <EmailEditor ref={emailEditorRef} onLoad={onLoad} />
+              <EmailEditor
+                ref={emailEditorRef}
+                onLoad={onLoad}
+                style={{ minHeight: "900px" }}
+              />
             </Col>
           </Row>
         </Container>

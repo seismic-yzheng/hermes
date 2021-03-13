@@ -1,9 +1,4 @@
-import {
-  query,
-  getMarkdownByNameAndType,
-  buildStatementForInsert,
-  getTemplateMarkdownByIDs,
-} from "./db";
+import { query, buildStatementForInsert } from "./db";
 import { templateMarkdownTableName, markdownTableName } from "./constants";
 import Filter from "bad-words";
 
@@ -32,24 +27,24 @@ async function storeTemplateMarkdown(
   template_id: number,
   default_value = undefined
 ) {
-  const res = await getTemplateMarkdownByIDs(template_id, markdown_id);
-  if (Object.keys(res).length == 0) {
-    let key_value = {
-      template_id: template_id,
-      markdown_id: markdown_id,
-    };
-    if (default_value) {
-      key_value["default_value"] = default_value;
-    }
-    let { statement, values } = buildStatementForInsert(
-      key_value,
-      templateMarkdownTableName
-    );
-    return await query(statement, values);
+  // const res = await getTemplateMarkdownByIDs(template_id, markdown_id);
+  // if (Object.keys(res).length == 0) {
+  let key_value = {
+    template_id: template_id,
+    markdown_id: markdown_id,
+  };
+  if (default_value) {
+    key_value["default_value"] = default_value;
   }
+  let { statement, values } = buildStatementForInsert(
+    key_value,
+    templateMarkdownTableName
+  );
+  return await query(statement, values);
+  //}
 }
 
-export async function storeMarkdown(
+export async function storeMarkdownForTemplate(
   name: string,
   type: string,
   template_id: number,
@@ -60,18 +55,7 @@ export async function storeMarkdown(
   await storeTemplateMarkdown(markdown_id, template_id, default_value);
 }
 
-async function updateDefaultValue(default_value) {
-  let statement = "UPDATE ";
-  statement += templateMarkdownTableName;
-  statement += " SET default_value=?";
-  let values = [null];
-  if (default_value) {
-    values = [default_value];
-  }
-  return await query(statement, values);
-}
-
-export async function getMarkdown(template_id: number) {
+export async function getMarkdownForTemplate(template_id: number) {
   let statement = "SELECT name, type, default_value FROM ";
   statement += templateMarkdownTableName;
   statement += " JOIN ";
@@ -82,10 +66,26 @@ export async function getMarkdown(template_id: number) {
   return await query(statement, values);
 }
 
-export async function deleteMarkdown(template_id: number) {
+export async function deleteMarkdownByTemplate(template_id: number) {
   let statement = "DELETE FROM ";
   statement += templateMarkdownTableName;
   statement += " WHERE template_id = ?";
   let values = [filter.clean(String(template_id))];
+  return await query(statement, values);
+}
+
+async function getTemplateMarkdownByIDs(template_id: any, markdown_id: any) {
+  let statement =
+    "SELECT * FROM template_markdown WHERE template_id = ? AND markdown_id = ?";
+  let values = [
+    filter.clean(String(template_id)),
+    filter.clean(String(markdown_id)),
+  ];
+  return await query(statement, values);
+}
+
+async function getMarkdownByNameAndType(name: any, type: any) {
+  let statement = "SELECT * FROM markdown WHERE name = ? AND type = ?";
+  let values = [filter.clean(String(name)), filter.clean(String(type))];
   return await query(statement, values);
 }

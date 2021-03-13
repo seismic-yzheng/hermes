@@ -92,7 +92,11 @@ const App = (props) => {
               />
             </Col>
             <Col xs={6} md={8}>
-              <EmailEditor ref={emailEditorRef} onLoad={onLoad} />
+              <EmailEditor
+                ref={emailEditorRef}
+                onLoad={onLoad}
+                style={{ minHeight: "900px" }}
+              />
             </Col>
           </Row>
         </Container>

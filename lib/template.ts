@@ -1,5 +1,5 @@
 import * as Mustache from "mustache";
-import { getMarkdown } from "../lib/markdown";
+import { getMarkdownForTemplate } from "../lib/markdown";
 import { templateTableName } from "../lib/constants";
 import { query, buildStatementForQueryByID } from "../lib/db";
 
@@ -54,7 +54,7 @@ export async function render(
     return null;
   }
   const result = results[0];
-  const stored_markdowns = (await getMarkdown(result.id)) as any[];
+  const stored_markdowns = (await getMarkdownForTemplate(result.id)) as any[];
   const validMarkDowns = validAndMergeMarkdowns(markdowns, stored_markdowns);
   let emailSubject = subject ? subject : result.subject;
   if (!emailSubject) {

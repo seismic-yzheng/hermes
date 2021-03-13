@@ -110,7 +110,6 @@ export default function EditTemplate() {
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
               <Subject setSubject={setSubject} subject={subject} />
-              <hr />
               <MarkdownForms
                 markdownValue={templateData.markdowns}
                 markdowns={markdowns}

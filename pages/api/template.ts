@@ -2,7 +2,8 @@ import { NextApiHandler } from "next";
 import Filter from "bad-words";
 import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
 import { templateTableName } from "../../lib/constants";
-import { storeMarkdown } from "../../lib/markdown";
+import { storeMarkdownForTemplate } from "../../lib/markdown";
+import { storeCategoryForTemplate } from "../../lib/category";
 
 const filter = new Filter();
 
@@ -12,7 +13,7 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
     res.status(405).end(`Method ${req.method} Not Allowed`);
     return;
   }
-  const { name, creator, html, design, markdowns } = req.body;
+  const { name, creator, html, design, markdowns, categories } = req.body;
   try {
     if (!name || !creator || !html || !design) {
       return res.status(400).json({
@@ -36,8 +37,13 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
       for (const markdown of markdowns) {
         const { name, type, default_value } = markdown;
         if (name) {
-          await storeMarkdown(name, type, id, default_value);
+          await storeMarkdownForTemplate(name, type, id, default_value);
         }
+      }
+    }
+    if (categories) {
+      for (const category of categories) {
+        await storeCategoryForTemplate(category, id);
       }
     }
     return res.json({ id: id });

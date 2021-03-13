@@ -13,6 +13,7 @@ const MarkdownForms = (props) => {
     const { name, value } = e.target;
     const temp = { ...markdowns };
     temp[markdownValue[index]["name"]] = value;
+    setMarkdowns(temp);
   };
 
   if (markdownValue) {

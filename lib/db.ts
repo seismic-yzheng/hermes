@@ -138,25 +138,6 @@ export function buildStatementForQueryByID(table: string, id: number) {
   return { statement: statement, values: values };
 }
 
-export async function getTemplateMarkdownByIDs(
-  template_id: any,
-  markdown_id: any
-) {
-  let statement =
-    "SELECT * FROM template_markdown WHERE template_id = ? AND markdown_id = ?";
-  let values = [
-    filter.clean(String(template_id)),
-    filter.clean(String(markdown_id)),
-  ];
-  return await query(statement, values);
-}
-
-export async function getMarkdownByNameAndType(name: any, type: any) {
-  let statement = "SELECT * FROM markdown WHERE name = ? AND type = ?";
-  let values = [filter.clean(String(name)), filter.clean(String(type))];
-  return await query(statement, values);
-}
-
 export function buildStatementForDelete(table: string, id: number) {
   let statement = "DELETE FROM ";
   statement += table;

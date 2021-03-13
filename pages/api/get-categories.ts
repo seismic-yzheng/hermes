@@ -5,7 +5,7 @@ import nlp from "compromise";
 import uclassify from "uclassify";
 import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
 import { templateTableName } from "../../lib/constants";
-import { storeMarkdown } from "../../lib/markdown";
+import { storeMarkdownForTemplate } from "../../lib/markdown";
 
 const filter = new Filter();
 

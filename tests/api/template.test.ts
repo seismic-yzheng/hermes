@@ -8,9 +8,11 @@ import {
   truncateTemplateTable,
   createMarkdownTable,
   truncateMarkdownTable,
+  createCategoryTable,
+  truncateCategoryTable,
 } from "../../lib/db_schema";
 import { getUID, sleep } from "../../lib/helper";
-import { getMarkdown } from "../../lib/markdown";
+import { getMarkdownForTemplate } from "../../lib/markdown";
 
 jest.setTimeout(30000);
 
@@ -30,9 +32,18 @@ async function getTestMarkdown(
   return markdown;
 }
 
+async function getTestCategories(num = 2) {
+  let res = [];
+  for (let i = 0; i < num; i++) {
+    res.push("category" + (await getUID()));
+  }
+  return res;
+}
+
 const createTemplate = async (
   user: string = "user:test",
   markdowns = undefined,
+  categories = undefined,
   html = undefined,
   design = undefined
 ) => {
@@ -50,6 +61,7 @@ const createTemplate = async (
     html: html,
     design: design,
     markdowns: markdowns,
+    categories: categories,
   };
   if (markdowns) {
     body["markdown"] = markdowns;
@@ -123,19 +135,26 @@ describe("CRUD test for template", () => {
   beforeAll(async () => {
     await createTemplateTable();
     await createMarkdownTable();
+    await createCategoryTable();
   });
   afterAll(async () => {
-    // await truncateMarkdownTable();
-    // await truncateTemplateTable();
+    await truncateMarkdownTable();
+    await truncateCategoryTable();
+    await truncateTemplateTable();
   });
-  test("create template with markdown", async () => {
+  test("create template with markdowns and categories", async () => {
     const markdown = await getTestMarkdown();
-    const { response } = await createTemplate(undefined, [markdown]);
+    const { response } = await createTemplate(
+      undefined,
+      [markdown],
+      await getTestCategories()
+    );
     expect(response._getStatusCode()).toBe(200);
   });
-  test("get template with markdown", async () => {
+  test("get template with markdown and categories", async () => {
     let markdown = await getTestMarkdown();
-    let { response } = await createTemplate(undefined, [markdown]);
+    let categories = await getTestCategories();
+    let { response } = await createTemplate(undefined, [markdown], categories);
     expect(response._getStatusCode()).toBe(200);
     const id = response._getJSONData()["id"];
     response = await getTemplate(id);
@@ -144,6 +163,7 @@ describe("CRUD test for template", () => {
     expect(data["id"]).toBe(id);
     markdown["default_value"] = null;
     expect(data["markdowns"]).toEqual([markdown]);
+    expect(data["categories"]).toEqual(categories);
   });
   test("query template with markdowns", async () => {
     let markdowns = [await getTestMarkdown(), await getTestMarkdown()];
@@ -159,11 +179,12 @@ describe("CRUD test for template", () => {
     }
     expect(data["markdowns"]).toEqual(markdowns);
   });
-  test("update template with markdowns", async () => {
+  test("update template with markdowns and categories", async () => {
     let markdowns = [
       await getTestMarkdown(undefined, undefined, "test"),
       await getTestMarkdown(undefined, undefined, "test"),
     ];
+    let categories = await getTestCategories();
     let { response } = await createTemplate();
     expect(response._getStatusCode()).toBe(200);
     const id = response._getJSONData()["id"];
@@ -177,6 +198,7 @@ describe("CRUD test for template", () => {
         creator: "user:2",
         html: "test_html2",
         markdowns: markdowns,
+        categories: categories,
       },
     });
     response = createResponse();
@@ -187,8 +209,10 @@ describe("CRUD test for template", () => {
     let data = response._getJSONData();
     expect(data["id"]).toBe(id);
     expect(data["markdowns"]).toEqual(markdowns);
+    expect(data["categories"]).toEqual(categories);
     markdowns[0]["default_value"] = "test2";
     markdowns[1] = await getTestMarkdown();
+    categories = await getTestCategories();
     request = createRequest({
       method: "PUT",
       query: {
@@ -199,6 +223,7 @@ describe("CRUD test for template", () => {
         creator: "user:2",
         html: "test_html2",
         markdowns: markdowns,
+        categories: categories,
       },
     });
     response = createResponse();
@@ -210,17 +235,22 @@ describe("CRUD test for template", () => {
     expect(data["id"]).toBe(id);
     markdowns[1]["default_value"] = null;
     expect(data["markdowns"]).toEqual(markdowns);
+    expect(data["categories"]).toEqual(categories);
   });
   test("delete template with markdown", async () => {
     let markdowns = [await getTestMarkdown(), await getTestMarkdown()];
-    let { response } = await createTemplate(undefined, markdowns);
+    let { response } = await createTemplate(
+      undefined,
+      markdowns,
+      await getTestCategories()
+    );
     expect(response._getStatusCode()).toBe(200);
     const id = response._getJSONData()["id"];
     response = await deleteTemplate(id);
     expect(response._getStatusCode()).toBe(200);
     response = await getTemplate(id);
     expect(response._getStatusCode()).toBe(404);
-    const res = (await getMarkdown(id)) as any[];
+    const res = (await getMarkdownForTemplate(id)) as any[];
     expect(res.length).toBe(0);
   });
   test("create template", async () => {
@@ -353,7 +383,12 @@ describe("test for sending email", () => {
     </html>`;
     const expected = "ok";
     const markdown = await getTestMarkdown("name", undefined, "John");
-    let { response } = await createTemplate(undefined, [markdown], html);
+    let { response } = await createTemplate(
+      undefined,
+      [markdown],
+      undefined,
+      html
+    );
     expect(response._getStatusCode()).toBe(200);
     const id = response._getJSONData()["id"];
     const markdowns = { name: "John" };

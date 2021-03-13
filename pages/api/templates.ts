@@ -6,7 +6,7 @@ import {
 } from "../../lib/db";
 import { getOrderBy, getSortBy, getLimit, getOffset } from "../../lib/request";
 import { templateTableName } from "../../lib/constants";
-import { getMarkdown } from "../../lib/markdown";
+import { getMarkdownForTemplate } from "../../lib/markdown";
 
 const templatesHandler: NextApiHandler = async (req, res) => {
   if (req.method != "GET") {
@@ -37,7 +37,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
     );
     let results = (await query(statement, values)) as any[];
     for (let result of results) {
-      const markdown = await getMarkdown(result.id);
+      const markdown = await getMarkdownForTemplate(result.id);
       result["markdowns"] = markdown;
     }
     return res.json(results);

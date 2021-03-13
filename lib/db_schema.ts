@@ -60,7 +60,37 @@ export async function createMarkdownTable() {
   }
 }
 
+export async function createCategoryTable() {
+  try {
+    await query(`
+    CREATE TABLE IF NOT EXISTS category (
+      id INT AUTO_INCREMENT,
+      name VARCHAR(128) NOT NULL,
+      PRIMARY KEY (id)
+    )
+    `);
+
+    await query(`
+    CREATE TABLE IF NOT EXISTS template_category (
+      template_id INT NOT NULL,
+      category_id INT NOT NULL,
+      PRIMARY KEY (template_id, category_id),
+      FOREIGN KEY (template_id) REFERENCES template(id),
+      FOREIGN KEY (category_id) REFERENCES category(id)
+    )
+    `);
+  } catch (e) {
+    console.log(e.message);
+    process.exit(1);
+  }
+}
+
 export async function truncateMarkdownTable() {
+  await truncateTable("category");
+  await truncateTable("template_category");
+}
+
+export async function truncateCategoryTable() {
   await truncateTable("markdown");
   await truncateTable("template_markdown");
 }
