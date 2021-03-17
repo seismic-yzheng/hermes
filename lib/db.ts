@@ -1,5 +1,6 @@
 import mysql from "serverless-mysql";
 import Filter from "bad-words";
+import { stat } from "fs";
 
 const filter = new Filter();
 
@@ -74,45 +75,89 @@ export function buildStatementForUpdate(
   return { statement: statement, values: values };
 }
 
-export function buildStatementForQuery(
-  key_value: {},
-  table: string,
+/*
+SELECT template FROM template
+JOIN category
+JOIN template_category
+ON template.id = template_category.template_id AND template_category.category_id = category.id
+WHERE template.name = test16156640191948947;
+
+"tableName" : {
+  "select": ["*"],
+  "keyValue": {"a": "value"},
+  "order": {"order_by": "a", "sort_by": "b"}
+}
+
+
+*/
+
+export function buildSelectStatement(keyValue: object) {
+  let values = [] as string[];
+  Object.keys(keyValue).forEach((tableName) => {
+    let select = [] as string[];
+    for (const col of keyValue[tableName]) {
+      select.push(tableName + "." + col);
+    }
+    if (select.length > 0) {
+      values.push(select.join(" , "));
+    } else {
+      values.push(tableName + ".*");
+    }
+  });
+  return "SELECT " + values.join(" , ");
+}
+
+export function buildFromStatement(tables: string[], conditions: string[]) {
+  let statement = " FROM " + tables.join(" JOIN ");
+  if (conditions.length > 0) {
+    statement += " ON " + conditions.join(" AND ");
+  }
+  return statement;
+}
+
+export function buildWhereStatement(keyValue: object) {
+  let whereStatement = "";
+  let values = [] as string[];
+  let attrs = [] as string[];
+  Object.keys(keyValue).forEach((tableName) => {
+    Object.keys(keyValue[tableName]).forEach((key) => {
+      let { value, include } = keyValue[tableName][key];
+      let col = tableName + "." + key;
+      if (value instanceof Array) {
+        let sub_attrs = [] as string[];
+        value.forEach((item) => {
+          sub_attrs.push("?");
+          values.push(filter.clean(String(item)));
+        });
+        if (include) {
+          attrs.push(col + " in (" + sub_attrs.join(",") + ")");
+        } else {
+          attrs.push(col + " not in (" + sub_attrs.join(",") + ")");
+        }
+      } else {
+        if (include) {
+          attrs.push(col + "= ?");
+        } else {
+          attrs.push(col + "!= ?");
+        }
+        values.push(filter.clean(String(value)));
+      }
+    });
+  });
+  if (attrs.length > 0) {
+    whereStatement += " WHERE ";
+    whereStatement += attrs.join(" AND ");
+  }
+  return { whereStatement: whereStatement, values: values };
+}
+
+export function buildFilterStatement(
   order_by: string = undefined,
   sort_by: string = "ASC",
   limit: number = undefined,
   offset: number = undefined
 ) {
-  let statement = "SELECT * FROM ";
-  statement += table;
-
-  let values = [] as string[];
-  let attrs = [] as string[];
-  Object.keys(key_value).forEach((key) => {
-    let { value, include } = key_value[key];
-    if (value instanceof Array) {
-      let sub_attrs = [] as string[];
-      value.forEach((item) => {
-        sub_attrs.push("?");
-        values.push(filter.clean(String(item)));
-      });
-      if (include) {
-        attrs.push(key + " in (" + sub_attrs.join(",") + ")");
-      } else {
-        attrs.push(key + " not in (" + sub_attrs.join(",") + ")");
-      }
-    } else {
-      if (include) {
-        attrs.push(key + "= ?");
-      } else {
-        attrs.push(key + "!= ?");
-      }
-      values.push(filter.clean(String(value)));
-    }
-  });
-  if (attrs.length > 0) {
-    statement += " WHERE ";
-    statement += attrs.join(" AND ");
-  }
+  let statement = "";
   if (order_by != undefined) {
     statement += " ORDER BY ";
     statement += order_by;
@@ -127,7 +172,49 @@ export function buildStatementForQuery(
     statement += " OFFSET ";
     statement += offset;
   }
+  return statement;
+}
+
+export function buildStatementForQueryWithJoin(
+  selectKV: object,
+  joinTables: string[],
+  conditions: string[],
+  whereKV: object,
+  order_by: string = undefined,
+  sort_by: string = "ASC",
+  limit: number = undefined,
+  offset: number = undefined
+) {
+  let statement = buildSelectStatement(selectKV);
+  statement += buildFromStatement(joinTables, conditions);
+  const { whereStatement, values } = buildWhereStatement(whereKV);
+  statement += whereStatement;
+  statement += buildFilterStatement(order_by, sort_by, limit, offset);
   return { statement: statement, values: values };
+}
+
+export function buildStatementForQuery(
+  keyValue: {},
+  table: string,
+  order_by: string = undefined,
+  sort_by: string = "ASC",
+  limit: number = undefined,
+  offset: number = undefined
+) {
+  const selectKV = {};
+  selectKV[table] = [];
+  const whereKV = {};
+  whereKV[table] = keyValue;
+  return buildStatementForQueryWithJoin(
+    selectKV,
+    [table],
+    [],
+    whereKV,
+    order_by,
+    sort_by,
+    limit,
+    offset
+  );
 }
 
 export function buildStatementForQueryByID(table: string, id: number) {

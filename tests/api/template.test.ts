@@ -321,12 +321,21 @@ describe("CRUD test for template", () => {
     let names = [] as string[];
     const user = "user:" + (await getUID());
     for (let i = 0; i < 10; i++) {
-      let { response, name } = await createTemplate(user);
+      let { response, name } = await createTemplate(user, undefined, [i]);
       expect(response._getStatusCode()).toBe(200);
       ids.push(response._getJSONData()["id"]);
       names.push(name);
       await sleep(1000);
     }
+    const user2 = "user:" + (await getUID());
+    let user2Ids = [] as string[];
+    let res = await createTemplate(user2, undefined, ["testCategory1"]);
+    user2Ids.push(res["response"]._getJSONData()["id"]);
+    res = await createTemplate(user2, undefined, ["testCategory1"]);
+    user2Ids.push(res["response"]._getJSONData()["id"]);
+    res = await createTemplate(user2, undefined, ["testCategory2"]);
+    user2Ids.push(res["response"]._getJSONData()["id"]);
+    console.log(user2Ids);
     // query ids
     let response = await getTemplates({ ids: ids.slice(0, 5) });
     expect(response._getStatusCode()).toBe(200);
@@ -349,7 +358,44 @@ describe("CRUD test for template", () => {
     // test order
     response = await getTemplates({ creators: [user], order_by: "created_at" });
     expect(response._getStatusCode()).toBe(200);
-    expect(getIDs(response._getJSONData())).toEqual(ids);
+    // test categories
+    response = await getTemplates({ categories: [0] });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData())).toEqual(ids.slice(0, 1));
+    response = await getTemplates({ categories: [0, 1, 2] });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData())).toEqual(ids.slice(0, 3));
+    response = await getTemplates({ categories: [10000] });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData())).toEqual([]);
+    response = await getTemplates({
+      creators: [user],
+      categories: [0, 1, 2],
+    });
+    expect(response._getStatusCode()).toBe(200);
+    console.log(ids);
+    expect(getIDs(response._getJSONData())).toEqual(ids.slice(0, 3));
+    console.log(ids);
+    response = await getTemplates({
+      creators: [user2],
+      categories: [0, 1, 2],
+    });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData())).toEqual([]);
+    response = await getTemplates({
+      creators: [user2],
+      categories: ["testCategory1"],
+    });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData())).toEqual(user2Ids.slice(0, 2));
+    response = await getTemplates({
+      creators: [user2],
+      categories: ["testCategory2"],
+    });
+    expect(response._getStatusCode()).toBe(200);
+    console.log(user2Ids);
+    console.log(user2Ids[2]);
+    expect(getIDs(response._getJSONData())).toEqual([user2Ids[2]]);
     response = await getTemplates({
       creators: [user],
       order_by: "created_at",

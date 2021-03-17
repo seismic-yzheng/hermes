@@ -3,6 +3,7 @@ import {
   query,
   buildStatementForQuery,
   getColumnValueForSearch,
+  buildStatementForQueryWithJoin,
 } from "../../lib/db";
 import { getOrderBy, getSortBy, getLimit, getOffset } from "../../lib/request";
 import { templateTableName } from "../../lib/constants";
@@ -15,7 +16,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
     return;
   }
   try {
-    const order_by = getOrderBy(req, ["created_at"]);
+    let order_by = getOrderBy(req, ["created_at"]);
     const sort_by = getSortBy(req);
     const limit = getLimit(req);
     const offset = getOffset(req);
@@ -27,14 +28,45 @@ const templatesHandler: NextApiHandler = async (req, res) => {
       creators: { col: "creator", include: true },
       exclude_creators: { col: "creator", include: false },
     });
-    let { statement, values } = buildStatementForQuery(
-      key_value,
-      templateTableName,
-      order_by,
-      sort_by,
-      limit,
-      offset
-    );
+    let statement = undefined;
+    let values = undefined;
+    if ("categories" in req.query) {
+      if (order_by) {
+        order_by = "template." + order_by;
+      }
+      const res = buildStatementForQueryWithJoin(
+        { template: [] },
+        ["template", "category", "template_category"],
+        [
+          "template.id = template_category.template_id",
+          "template_category.category_id = category.id",
+        ],
+        {
+          category: {
+            name: { value: req.query["categories"], include: true },
+          },
+          template: key_value,
+        },
+        order_by,
+        sort_by,
+        limit,
+        offset
+      );
+      statement = res["statement"];
+      values = res["values"];
+      console.log(statement, values);
+    } else {
+      const res = buildStatementForQuery(
+        key_value,
+        templateTableName,
+        order_by,
+        sort_by,
+        limit,
+        offset
+      );
+      statement = res["statement"];
+      values = res["values"];
+    }
     let results = (await query(statement, values)) as any[];
     for (let result of results) {
       const markdown = await getMarkdownForTemplate(result.id);
