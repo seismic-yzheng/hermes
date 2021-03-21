@@ -2,7 +2,7 @@ export async function getCategories(text: string) {
   const textrazorURL = "https://api.textrazor.com";
   const textrazorAPIKey =
     "e8f3c6e62dbdc8f86f18deeddb3d29e6f403de83f41a818541ff1053";
-  const max_category = 10;
+  const max_category = 5;
   const body =
     "extractors=topics,categories&classifiers=textrazor_newscodes&text=" + text;
   console.log(body);

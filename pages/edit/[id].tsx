@@ -9,6 +9,8 @@ import { useClientRouter } from "use-client-router";
 import Router from "next/router";
 import TopNavBar from "components/nav";
 import Subject from "components/subject";
+import InputGroup from "react-bootstrap/InputGroup";
+import CustomTagsInput from "@/components/tags-input";
 
 import EmailEditor from "react-email-editor";
 
@@ -22,6 +24,7 @@ export default function EditTemplate() {
   const [markdownList, setMarkdownList] = useState([
     { name: "", type: "string", default_value: "" },
   ]);
+  const [categories, setCategories] = useState([]);
   const [subject, setSubject] = useState("");
 
   const saveHtml = async (event: any) => {
@@ -40,6 +43,7 @@ export default function EditTemplate() {
             design: design,
             markdowns: markdownList,
             subject: subject,
+            categories: categories,
           }),
         });
         setSaving(false);
@@ -55,6 +59,9 @@ export default function EditTemplate() {
   const onLoad = () => {
     if (templateData.markdowns && templateData.markdowns.length > 0) {
       setMarkdownList(templateData.markdowns);
+    }
+    if (templateData.categories && templateData.categories.length > 0) {
+      setCategories(templateData.categories);
     }
     setSubject(templateData.subject);
     if (emailEditorRef.current) {
@@ -72,9 +79,15 @@ export default function EditTemplate() {
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
               <Subject setSubject={setSubject} subject={subject} />
+              <hr />
               <Markdowns
                 setMarkdownList={setMarkdownList}
                 markdownList={markdownList}
+              />
+              <hr />
+              <CustomTagsInput
+                categories={categories}
+                setCategories={setCategories}
               />
             </Col>
             <Col xs={6} md={8}>

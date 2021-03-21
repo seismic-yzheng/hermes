@@ -18,13 +18,87 @@ const App = (props) => {
   const [markdownList, setMarkdownList] = useState([
     { name: "", type: "string", default_value: "" },
   ]);
+  const [categories, setCategories] = useState([]);
+  const [design, setDesign] = useState("");
+  const [html, setHtml] = useState("");
   const [saveWindowShow, setSaveWindowShow] = useState(false);
+  const HTMLPrefix = [".", "@", "{"];
+  const HTMLPostfix = [";", "}", "{", ","];
+
+  const isHTML = (text: String) => {
+    return (
+      HTMLPrefix.indexOf(text[0]) > -1 ||
+      HTMLPostfix.indexOf(text[text.length - 1]) > -1
+    );
+  };
+
+  const save = async (event: any, name: any) => {
+    emailEditorRef.current.editor.exportHtml(async (data: any) => {
+      const { design, html } = data;
+      console.log("------1-----");
+      setDesign(design);
+      setHtml(html);
+
+      const span = document.createElement("span");
+      span.innerHTML = html;
+      let HTMLText = [];
+      for (const text of span.innerText.split("\n")) {
+        const trimmed_text = text.trim();
+        if (trimmed_text != "" && !isHTML(trimmed_text)) {
+          console.log("------2-----");
+          HTMLText.push(trimmed_text);
+        }
+      }
+      console.log("------3-----");
+      console.log(HTMLText);
+      if (HTMLText.length > 0) {
+        const res = await fetch("/api/get-categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: HTMLText.join(" "),
+          }),
+        });
+
+        const json = await res.json();
+        console.log("------4-----");
+        console.log(json);
+        setCategories(json);
+      } else {
+        setCategories([]);
+      }
+
+      setSaveWindowShow(true);
+    });
+  };
 
   const exportHtml = async (event: any, name: any) => {
     event.preventDefault();
     setCreating(true);
     setSaveWindowShow(false);
-    try {
+    const res = await fetch("/api/template", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        creator: "user:1",
+        html: html,
+        design: design,
+        markdowns: markdownList,
+        subject: subject,
+        categories: categories,
+      }),
+    });
+
+    const json = await res.json();
+    setCreating(false);
+    if (!res.ok) throw Error(json.message);
+    Router.push(`/templates`);
+    /*try {
       emailEditorRef.current.editor.exportHtml(async (data: any) => {
         const { design, html } = data;
         const res = await fetch("/api/template", {
@@ -48,7 +122,7 @@ const App = (props) => {
       });
     } catch (e) {
       throw Error(e.message);
-    }
+    }*/
   };
 
   const onLoad = () => {
@@ -72,12 +146,11 @@ const App = (props) => {
     }
     return (
       <div>
-        <TopNavBar
-          createButton={() => setSaveWindowShow(true)}
-          creating={creating}
-        />
+        <TopNavBar createButton={save} creating={creating} />
         <TemplateSaveWindow
           show={saveWindowShow}
+          categories={categories}
+          setCategories={setCategories}
           setShow={setSaveWindowShow}
           saveTemplate={exportHtml}
         />

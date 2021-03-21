@@ -42,8 +42,8 @@ const createTemplateHandler: NextApiHandler = async (req, res) => {
       }
     }
     if (categories) {
-      for (const category of categories) {
-        await storeCategoryForTemplate(category, id);
+      for (const category of Array.from(new Set(categories))) {
+        await storeCategoryForTemplate(category as string, id);
       }
     }
     return res.json({ id: id });

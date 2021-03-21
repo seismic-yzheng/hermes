@@ -1,8 +1,6 @@
 import { NextApiHandler } from "next";
 import Filter from "bad-words";
 import { getCategories } from "../../lib/textrazor";
-import nlp from "compromise";
-import uclassify from "uclassify";
 import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
 import { templateTableName } from "../../lib/constants";
 import { storeMarkdownForTemplate } from "../../lib/markdown";
@@ -10,6 +8,27 @@ import { storeMarkdownForTemplate } from "../../lib/markdown";
 const filter = new Filter();
 
 const getCategoriesHandler: NextApiHandler = async (req, res) => {
+  const cate = [
+    "car",
+    "fruit",
+    "house",
+    "people",
+    "computer",
+    "lamp",
+    "keyboard",
+    "speaker",
+    "place",
+    "country",
+    "mouse",
+    "laptop",
+    "screen",
+    "rule",
+    "paper",
+    "tea",
+    "drink",
+    "pad",
+    "tissue",
+  ];
   if (req.method != "POST") {
     res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);

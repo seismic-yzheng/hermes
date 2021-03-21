@@ -3,6 +3,8 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import CustomTagsInput from "@/components/tags-input";
+import Row from "react-bootstrap/Row";
 
 export default function TemplateSaveWindow(props) {
   const [name, setName] = useState("");
@@ -33,6 +35,12 @@ export default function TemplateSaveWindow(props) {
               onChange={(e) => setName(e.target.value)}
             />
           </InputGroup>
+        </div>
+        <div>
+          <CustomTagsInput
+            categories={props.categories}
+            setCategories={props.setCategories}
+          />
         </div>
       </Modal.Body>
       <Modal.Footer>
