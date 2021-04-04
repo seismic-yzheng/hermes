@@ -1,11 +1,40 @@
 import * as Mustache from "mustache";
 import { getMarkdownForTemplate } from "../lib/markdown";
 import { templateTableName } from "../lib/constants";
-import { query, buildStatementForQueryByID } from "../lib/db";
+import {
+  query,
+  buildStatementForQueryByID,
+  buildStatementForUpdate,
+} from "../lib/db";
 
 export async function getTemplateById(id: number) {
   let { statement, values } = buildStatementForQueryByID(templateTableName, id);
   return await query(statement, values);
+}
+
+export async function updateTemplateUsed(id: number) {
+  const statement = "UPDATE template SET used=used + 1 WHERE id = ?";
+  const values = [id];
+  await query(statement, values);
+}
+
+export async function updateTemplateRate(id: number, rate: number) {
+  let query_ = buildStatementForQueryByID(templateTableName, id);
+  let statement = query_["statement"];
+  let values = query_["values"];
+  let res = (await query(statement, values)) as any;
+  res = res[0];
+  const total_rate = res.total_rate + rate;
+  const rate_count = res.rate_count + 1;
+  const new_rate = total_rate / rate_count;
+  query_ = buildStatementForUpdate(
+    { total_rate: total_rate, rate_count: rate_count, rate: new_rate },
+    templateTableName,
+    id
+  );
+  statement = query_["statement"];
+  values = query_["values"];
+  await query(statement, values);
 }
 
 export function apply(template: string, markdowns: object) {

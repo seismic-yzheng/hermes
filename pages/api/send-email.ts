@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { render } from "../../lib/template";
+import { render, updateTemplateUsed } from "../../lib/template";
 import { sendEmail } from "../../lib/helper";
 
 const sendEmailHandler: NextApiHandler = async (req, res) => {
@@ -19,6 +19,7 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     const emailSubject = rendered["subject"];
     const fake_sender = "test@test.com";
     // await sendEmail(fake_sender, recipients, emailSubject, html);
+    await updateTemplateUsed(id);
     return res.json("ok");
   } catch (e) {
     console.log(e);

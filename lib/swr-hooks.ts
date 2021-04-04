@@ -13,6 +13,15 @@ export function getTemplate(id: string) {
   };
 }
 
+export function getReview(id: string) {
+  const { data, error } = useSWR(`/api/review/?template_id=${id}`, fetcher);
+  return {
+    reviewData: data,
+    reviewIsLoading: !error && !data,
+    isError: error,
+  };
+}
+
 export function getTemplates(params: any = {}) {
   const { data, error } = useSWR(
     `/api/templates/?` + new URLSearchParams(params).toString(),

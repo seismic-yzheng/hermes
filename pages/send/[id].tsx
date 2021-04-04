@@ -2,17 +2,20 @@ import React, { useRef, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { getTemplate } from "../../lib/swr-hooks";
+import { getTemplate, getReview } from "../../lib/swr-hooks";
 import { useClientRouter } from "use-client-router";
 import TopNavBar from "components/nav";
 import MarkdownForms from "components/markdowns/form";
 import ServerErrorWindow from "components/window/server-error";
+import ReivewSaveWindow from "components/window/review-save";
 import Router from "next/router";
 import EmailSendWindow from "components/window/send";
 import Subject from "components/subject";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
+import Review from "components/review";
 import InputGroup from "react-bootstrap/InputGroup";
+import Alert from "react-bootstrap/Alert";
 
 export default function EditTemplate() {
   const [previewing, setPreviewing] = useState(false);
@@ -20,8 +23,10 @@ export default function EditTemplate() {
   const router = useClientRouter();
   const { id } = router.query;
   const { templateData, isLoading } = getTemplate(id as string);
+  const { reviewData, reviewIsLoading } = getReview(id as string);
   const [markdowns, setMarkdowns] = useState(undefined);
   const [sendWindowShow, setSendWindowShow] = useState(false);
+  const [reviewWindowShow, setReviewWindowShow] = useState(false);
   const [html, setHTML] = useState(undefined);
   const [previewSubject, setPreviewSubject] = useState("");
   const [errorWindowShow, setErrorWindowShow] = useState(false);
@@ -70,11 +75,11 @@ export default function EditTemplate() {
     if (!res.ok) {
       setErrorWindowShow(true);
     } else {
-      Router.push(`/templates`);
+      setReviewWindowShow(true);
     }
   };
 
-  if (!isLoading) {
+  if (!isLoading && !reviewIsLoading) {
     if (!markdowns) {
       let temp = {};
       templateData.markdowns.forEach((item) => {
@@ -88,6 +93,7 @@ export default function EditTemplate() {
       if (templateData.subject) {
         setSubject(templateData.subject);
       }
+      setHTML(templateData.html);
     }
     return (
       <div>
@@ -101,6 +107,11 @@ export default function EditTemplate() {
           show={sendWindowShow}
           setShow={setSendWindowShow}
           sendEmail={send}
+        />
+        <ReivewSaveWindow
+          show={reviewWindowShow}
+          id={templateData.id}
+          setErrorWindowShow={setErrorWindowShow}
         />
         <ServerErrorWindow
           show={errorWindowShow}
@@ -116,9 +127,18 @@ export default function EditTemplate() {
                 setMarkdowns={setMarkdowns}
                 preview={preview}
               />
+              <Review reviews={reviewData} />
             </Col>
             <Col xs={6} md={8}>
-              {!previewed && <p>Press preview button to see preview.</p>}
+              {!previewed && (
+                <div>
+                  <Alert variant="danger">
+                    Press preview button to see rendered Email.
+                  </Alert>
+                  <div style={{ marginBottom: "10px" }}>Template:</div>
+                  <div dangerouslySetInnerHTML={{ __html: html }} />
+                </div>
+              )}
               {previewed && (
                 <Form>
                   <Form.Group controlId="formBasicEmail">

@@ -16,7 +16,7 @@ function Templates({ templates }) {
         >
           {templates.map((e) => (
             <Col key={e.id} style={{ textAlign: "center", marginTop: 50 }}>
-              <Template id={e.id} name={e.name} html={e.html} />
+              <Template template={e} />
             </Col>
           ))}
         </Row>

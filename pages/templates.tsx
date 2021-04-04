@@ -23,21 +23,30 @@ export default function TemplatesPage(init_params) {
     return <div>loading</div>;
   }
 
-  const sortByCreateDateDesc = async (event: any) => {
+  const getLatest = async (event: any) => {
     let new_params = { ...params };
     new_params["order_by"] = "created_at";
     new_params["sort_by"] = "DESC";
     setParams(new_params);
-    setSortBy("Create Date New to Old");
+    setSortBy("Latest");
   };
 
-  const sortByCreateDateAsc = async (event: any) => {
+  const getHottest = async (event: any) => {
     let new_params = { ...params };
-    new_params["order_by"] = "created_at";
-    new_params["sort_by"] = "ASC";
+    new_params["order_by"] = "used";
+    new_params["sort_by"] = "DESC";
     setParams(new_params);
     console.log("---------------");
-    setSortBy("Create Date New to Old");
+    setSortBy("Hottest");
+  };
+
+  const getHighestRated = async (event: any) => {
+    let new_params = { ...params };
+    new_params["order_by"] = "rate";
+    new_params["sort_by"] = "DESC";
+    setParams(new_params);
+    console.log("---------------");
+    setSortBy("Highest rated");
   };
 
   const sortByDefault = async (event: any) => {
@@ -70,11 +79,10 @@ export default function TemplatesPage(init_params) {
                 variant="outline-secondary"
                 title={sortBy}
               >
-                <Dropdown.Item onClick={sortByCreateDateDesc}>
-                  Create Date New to Old
-                </Dropdown.Item>
-                <Dropdown.Item onClick={sortByCreateDateAsc}>
-                  Create Date Old to New
+                <Dropdown.Item onClick={getLatest}>Latest</Dropdown.Item>
+                <Dropdown.Item onClick={getHottest}>Hottest</Dropdown.Item>
+                <Dropdown.Item onClick={getHighestRated}>
+                  Highest rated
                 </Dropdown.Item>
                 <Dropdown.Item onClick={sortByDefault}>Default</Dropdown.Item>
               </DropdownButton>

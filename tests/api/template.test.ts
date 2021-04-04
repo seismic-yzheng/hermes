@@ -3,6 +3,7 @@ import templatesHandler from "../../pages/api/templates";
 import templateHandler from "../../pages/api/template/[id]";
 import sendEmailHandler from "../../pages/api/send-email";
 import createTemplateHandler from "../../pages/api/template";
+import reviewHandler from "../../pages/api/review";
 import {
   createTemplateTable,
   truncateTemplateTable,
@@ -10,6 +11,8 @@ import {
   truncateMarkdownTable,
   createCategoryTable,
   truncateCategoryTable,
+  createReviewTable,
+  truncateReviewTable,
 } from "../../lib/db_schema";
 import { getUID, sleep } from "../../lib/helper";
 import { getMarkdownForTemplate } from "../../lib/markdown";
@@ -101,6 +104,38 @@ const sendEmail = async (id, markdowns) => {
   return response;
 };
 
+const createReview = async (
+  template_id: Number,
+  review: String,
+  rate: Number,
+  user: string = "user:test"
+) => {
+  const request = createRequest({
+    method: "POST",
+    body: {
+      review: review,
+      template_id: template_id,
+      rate: rate,
+      user: user,
+    },
+  });
+  const response = createResponse();
+  await reviewHandler(request, response);
+  return response;
+};
+
+const getReview = async (template_id: Number) => {
+  const request = createRequest({
+    method: "GET",
+    query: {
+      template_id: template_id,
+    },
+  });
+  const response = createResponse();
+  await reviewHandler(request, response);
+  return response;
+};
+
 const getTemplates = async (query: {}) => {
   const request = createRequest({
     method: "GET",
@@ -136,11 +171,13 @@ describe("CRUD test for template", () => {
     await createTemplateTable();
     await createMarkdownTable();
     await createCategoryTable();
+    await createReviewTable();
   });
   afterAll(async () => {
     await truncateMarkdownTable();
     await truncateCategoryTable();
     await truncateTemplateTable();
+    await truncateReviewTable();
   });
   test("create template with markdowns and categories", async () => {
     const markdown = await getTestMarkdown();
@@ -150,6 +187,33 @@ describe("CRUD test for template", () => {
       await getTestCategories()
     );
     expect(response._getStatusCode()).toBe(200);
+  });
+  test("create and get review", async () => {
+    let { response } = await createTemplate();
+    expect(response._getStatusCode()).toBe(200);
+    const id = response._getJSONData()["id"];
+    const user = "user:123";
+    response = await createReview(id, "test review", 4.5, user);
+    expect(response._getStatusCode()).toBe(200);
+    response = await getReview(id);
+    expect(response._getStatusCode()).toBe(200);
+    let data = response._getJSONData();
+    expect(data[0].rate).toBe(4.5);
+    response = await getTemplate(id);
+    expect(response._getStatusCode()).toBe(200);
+    data = response._getJSONData();
+    expect(data.rate).toBe(4.5);
+
+    response = await createReview(id, "test review", 3.5, user);
+    expect(response._getStatusCode()).toBe(200);
+    response = await getReview(id);
+    expect(response._getStatusCode()).toBe(200);
+    data = response._getJSONData();
+    expect(data.length).toBe(2);
+    response = await getTemplate(id);
+    expect(response._getStatusCode()).toBe(200);
+    data = response._getJSONData();
+    expect(data.rate).toBe(4);
   });
   test("get template with markdown and categories", async () => {
     let markdown = await getTestMarkdown();

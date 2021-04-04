@@ -1,11 +1,8 @@
 import { NextApiHandler } from "next";
-import Filter from "bad-words";
 import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
 import { templateTableName } from "../../lib/constants";
 import { storeMarkdownForTemplate } from "../../lib/markdown";
 import { storeCategoryForTemplate } from "../../lib/category";
-
-const filter = new Filter();
 
 const createTemplateHandler: NextApiHandler = async (req, res) => {
   if (req.method != "POST") {

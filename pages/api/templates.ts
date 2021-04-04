@@ -16,7 +16,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
     return;
   }
   try {
-    let order_by = getOrderBy(req, ["created_at"]);
+    let order_by = getOrderBy(req, ["created_at", "rate", "used"]);
     const sort_by = getSortBy(req);
     const limit = getLimit(req);
     const offset = getOffset(req);

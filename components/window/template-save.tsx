@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import CustomTagsInput from "@/components/tags-input";
-import Row from "react-bootstrap/Row";
 
 export default function TemplateSaveWindow(props) {
   const [name, setName] = useState("");

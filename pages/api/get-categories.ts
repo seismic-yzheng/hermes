@@ -41,8 +41,8 @@ const getCategoriesHandler: NextApiHandler = async (req, res) => {
         message: "`text` is required",
       });
     }
-    const categories = await getCategories(text);
-    console.log(categories);
+    // const categories = await getCategories(text);
+    const categories = [];
     return res.json(categories);
   } catch (e) {
     console.error(e);

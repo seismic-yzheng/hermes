@@ -30,6 +30,7 @@ async function query(q) {
 // Create "entries" table if doesn't exist
 async function createTemplateTable() {
   try {
+    console.log("---------------");
     await query(`
     CREATE TABLE IF NOT EXISTS template (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,7 +41,9 @@ async function createTemplateTable() {
       creator VARCHAR(32) NOT NULL,
       likes INT NOT NULL DEFAULT 0,
       used INT NOT NULL DEFAULT 0,
-      rate INT NOT NULL DEFAULT -1,
+      total_rate FLOAT NOT NULL DEFAULT 0.0,
+      rate_count INT NOT NULL DEFAULT 0,
+      rate FLOAT NOT NULL DEFAULT 0.0,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at
         TIMESTAMP
@@ -107,10 +110,31 @@ async function createCategoryTable() {
   }
 }
 
+async function createReviewTable() {
+  try {
+    await query(`
+    CREATE TABLE IF NOT EXISTS review (
+      id INT AUTO_INCREMENT,
+      review TEXT NOT NULL,
+      rate FLOAT NOT NULL DEFAULT 0.0,
+      user VARCHAR(128) NOT NULL,
+      template_id INT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (template_id) REFERENCES template(id),
+      PRIMARY KEY (id)
+    )
+    `);
+  } catch (e) {
+    console.log(e.message);
+    process.exit(1);
+  }
+}
+
 async function migrate() {
   await createTemplateTable();
   await createMarkdownTable();
   await createCategoryTable();
+  await createReviewTable();
   console.log("migration ran successfully");
 }
 migrate().then(() => process.exit());
