@@ -7,13 +7,11 @@ const filter = new Filter();
 async function getOrCreateMarkdown(name: string, type: string) {
   let id: string;
   let results = await getMarkdownByNameAndType(name, type);
-  console.log(results);
   if (Object.keys(results).length == 0) {
     let { statement, values } = buildStatementForInsert(
       { name: name, type: type },
       markdownTableName
     );
-    console.log(statement, values);
     results = await query(statement, values);
     id = results["insertId"];
   } else {
@@ -50,7 +48,6 @@ export async function storeMarkdownForTemplate(
   template_id: number,
   default_value = undefined
 ) {
-  console.log(name, type);
   const markdown_id = (await getOrCreateMarkdown(name, type)) as any;
   await storeTemplateMarkdown(markdown_id, template_id, default_value);
 }

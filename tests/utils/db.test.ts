@@ -18,21 +18,22 @@ describe("test for build query statement", () => {
       "testCategory",
     ];
 
-    const { whereStatement, values } = buildWhereStatement({
-      template: {
-        name: { value: "testTemplate", include: true },
-        creator: { value: ["user:1", "user:2"], include: true },
+    const { whereStatement, values } = buildWhereStatement(
+      {
+        template: {
+          name: { value: "testTemplate", include: true },
+          creator: { value: ["user:1", "user:2"], include: true },
+        },
+        template_category: { id: { value: "12345", include: false } },
+        category: { name: { value: "testCategory", include: true } },
       },
-      template_category: { id: { value: "12345", include: false } },
-      category: { name: { value: "testCategory", include: true } },
-    });
-    console.log(values, whereStatement);
+      undefined
+    );
     expect(whereStatement).toBe(expect_statement);
     expect(values).toEqual(expect_values);
   });
   test("build empty where statement", async () => {
-    const { whereStatement, values } = buildWhereStatement({});
-    console.log(values, whereStatement);
+    const { whereStatement, values } = buildWhereStatement({}, undefined);
     expect(whereStatement).toBe("");
     expect(values).toEqual([]);
   });
@@ -44,28 +45,27 @@ describe("test for build query statement", () => {
       category: ["name"],
       template_category: [],
     });
-    console.log(statement);
     expect(statement).toBe(expect_statement);
   });
   test("build from statement", async () => {
     const expect_statement =
-      " FROM template JOIN category JOIN template_category ON template.id = template_category.template_id AND template_category.category_id = category.id";
+      " FROM template LEFT JOIN template_category ON template.id = template_category.template_id LEFT JOIN category ON template_category.category_id = category.id";
     const statement = buildFromStatement(
-      ["template", "category", "template_category"],
+      ["template", "template_category", "category"],
       [
         "template.id = template_category.template_id",
         "template_category.category_id = category.id",
       ]
     );
-    console.log(statement);
     expect(statement).toBe(expect_statement);
   });
   test("build query statement with join", async () => {
     const expect_statement =
       "SELECT template.* , category.* FROM template " +
-      "JOIN category " +
-      "JOIN template_category " +
-      "ON template.id = template_category.template_id AND template_category.category_id = category.id " +
+      "LEFT JOIN template_category " +
+      "ON template.id = template_category.template_id " +
+      "LEFT JOIN category " +
+      "ON template_category.category_id = category.id " +
       "WHERE template.name= ? " +
       "ORDER BY template.created_at ASC " +
       "LIMIT 10 " +
@@ -73,7 +73,7 @@ describe("test for build query statement", () => {
     const expect_values = ["testName"];
     const { statement, values } = buildStatementForQueryWithJoin(
       { template: [], category: [] },
-      ["template", "category", "template_category"],
+      ["template", "template_category", "category"],
       [
         "template.id = template_category.template_id",
         "template_category.category_id = category.id",
@@ -83,12 +83,12 @@ describe("test for build query statement", () => {
           name: { value: "testName", include: true },
         },
       },
+      undefined,
       "template.created_at",
       "ASC",
       10,
       10
     );
-    console.log(statement, values);
     expect(statement).toBe(expect_statement);
     expect(values).toEqual(expect_values);
   });
@@ -108,7 +108,6 @@ describe("test for build query statement", () => {
       10,
       10
     );
-    console.log(statement, values);
     expect(statement).toBe(expect_statement);
     expect(values).toEqual(expect_values);
   });

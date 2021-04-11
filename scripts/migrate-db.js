@@ -1,8 +1,6 @@
 const path = require("path");
 const envPath = path.resolve(process.cwd(), ".env.local");
 
-console.log({ envPath });
-
 require("dotenv").config({ path: envPath });
 
 const mysql = require("serverless-mysql");
@@ -30,7 +28,6 @@ async function query(q) {
 // Create "entries" table if doesn't exist
 async function createTemplateTable() {
   try {
-    console.log("---------------");
     await query(`
     CREATE TABLE IF NOT EXISTS template (
       id INT AUTO_INCREMENT PRIMARY KEY,

@@ -35,7 +35,6 @@ const App = (props) => {
   const save = async (event: any, name: any) => {
     emailEditorRef.current.editor.exportHtml(async (data: any) => {
       const { design, html } = data;
-      console.log("------1-----");
       setDesign(design);
       setHtml(html);
 
@@ -45,12 +44,9 @@ const App = (props) => {
       for (const text of span.innerText.split("\n")) {
         const trimmed_text = text.trim();
         if (trimmed_text != "" && !isHTML(trimmed_text)) {
-          console.log("------2-----");
           HTMLText.push(trimmed_text);
         }
       }
-      console.log("------3-----");
-      console.log(HTMLText);
       if (HTMLText.length > 0) {
         const res = await fetch("/api/get-categories", {
           method: "POST",
@@ -63,8 +59,6 @@ const App = (props) => {
         });
 
         const json = await res.json();
-        console.log("------4-----");
-        console.log(json);
         setCategories(json);
       } else {
         setCategories([]);

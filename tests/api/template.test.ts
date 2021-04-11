@@ -160,7 +160,7 @@ const deleteTemplate = async (id) => {
 
 const getIDs = (data: []) => {
   let received = [] as number[];
-  data.forEach((item) => {
+  data["results"].forEach((item) => {
     received.push(item["id"]);
   });
   return received;
@@ -236,7 +236,7 @@ describe("CRUD test for template", () => {
     const id = response._getJSONData()["id"];
     response = await getTemplates({ ids: id });
     expect(response._getStatusCode()).toBe(200);
-    const data = response._getJSONData()[0];
+    const data = response._getJSONData()["results"][0];
     expect(data["id"]).toBe(id);
     for (let markdown of markdowns) {
       markdown["default_value"] = null;
@@ -371,7 +371,7 @@ describe("CRUD test for template", () => {
     }
     let response = await getTemplates({ creators: users });
     expect(response._getStatusCode()).toBe(200);
-    expect(response._getJSONData().length).toBe(10);
+    expect(response._getJSONData()["results"].length).toBe(10);
     response = await getTemplates({
       exclude_creators: [users[0]],
     });
@@ -399,7 +399,6 @@ describe("CRUD test for template", () => {
     user2Ids.push(res["response"]._getJSONData()["id"]);
     res = await createTemplate(user2, undefined, ["testCategory2"]);
     user2Ids.push(res["response"]._getJSONData()["id"]);
-    console.log(user2Ids);
     // query ids
     let response = await getTemplates({ ids: ids.slice(0, 5) });
     expect(response._getStatusCode()).toBe(200);
@@ -411,7 +410,7 @@ describe("CRUD test for template", () => {
     // query creator
     response = await getTemplates({ creators: [user] });
     expect(response._getStatusCode()).toBe(200);
-    expect(response._getJSONData().length).toBe(10);
+    expect(response._getJSONData()["results"].length).toBe(10);
     // test pagination
     response = await getTemplates({ creators: [user], limit: 5, offset: 0 });
     expect(response._getStatusCode()).toBe(200);
@@ -422,6 +421,10 @@ describe("CRUD test for template", () => {
     // test order
     response = await getTemplates({ creators: [user], order_by: "created_at" });
     expect(response._getStatusCode()).toBe(200);
+    // test keywords
+    response = await getTemplates({ keywords: "test" });
+    expect(response._getStatusCode()).toBe(200);
+    expect(getIDs(response._getJSONData()).length).toBeGreaterThanOrEqual(10);
     // test categories
     response = await getTemplates({ categories: [0] });
     expect(response._getStatusCode()).toBe(200);
@@ -437,9 +440,7 @@ describe("CRUD test for template", () => {
       categories: [0, 1, 2],
     });
     expect(response._getStatusCode()).toBe(200);
-    console.log(ids);
     expect(getIDs(response._getJSONData())).toEqual(ids.slice(0, 3));
-    console.log(ids);
     response = await getTemplates({
       creators: [user2],
       categories: [0, 1, 2],
@@ -457,8 +458,6 @@ describe("CRUD test for template", () => {
       categories: ["testCategory2"],
     });
     expect(response._getStatusCode()).toBe(200);
-    console.log(user2Ids);
-    console.log(user2Ids[2]);
     expect(getIDs(response._getJSONData())).toEqual([user2Ids[2]]);
     response = await getTemplates({
       creators: [user],

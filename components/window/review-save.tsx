@@ -12,8 +12,6 @@ export default function ReivewSaveWindow(props) {
   const [rate, setRate] = useState(0);
 
   const save = async () => {
-    console.log(rate);
-    console.log(review);
     const res = await fetch("/api/review", {
       method: "POST",
       headers: {

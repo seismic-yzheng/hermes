@@ -5,24 +5,18 @@ export async function getCategories(text: string) {
   const max_category = 5;
   const body =
     "extractors=topics,categories&classifiers=textrazor_newscodes&text=" + text;
-  console.log(body);
   const result = await fetch(textrazorURL, {
     method: "POST",
     headers: { "x-textrazor-key": textrazorAPIKey },
     body: body,
   });
-  console.log("-----------");
-  console.log(result.status);
   if (result.status != 200) {
     throw Error("error fetch textrazor");
   }
   let response = await result.json();
-  console.log(response);
   response = response["response"];
-  console.log(response);
   const topics = response["topics"];
   const categories = response["categories"];
-  console.log(categories);
   let res = [] as string[];
   if (categories) {
     categories.forEach((category) => {

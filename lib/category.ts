@@ -7,13 +7,11 @@ const filter = new Filter();
 async function getOrCreateCategory(name: string) {
   let id: string;
   let results = await getCategoryByName(name);
-  console.log(results);
   if (Object.keys(results).length == 0) {
     let { statement, values } = buildStatementForInsert(
       { name: name },
       categoryTableName
     );
-    console.log(statement, values);
     results = await query(statement, values);
     id = results["insertId"];
   } else {

@@ -107,21 +107,31 @@ export function buildSelectStatement(keyValue: object) {
   return "SELECT " + values.join(" , ");
 }
 
+export function buildCountStatement() {
+  return "SELECT COUNT(*) ";
+}
+
 export function buildFromStatement(tables: string[], conditions: string[]) {
-  let statement = " FROM " + tables.join(" JOIN ");
+  let statement = " FROM " + tables[0];
   if (conditions.length > 0) {
-    statement += " ON " + conditions.join(" AND ");
+    for (let i = 0; i < conditions.length; i++) {
+      statement += " LEFT JOIN " + tables[i + 1];
+      statement += " ON " + conditions[i];
+    }
   }
   return statement;
 }
 
-export function buildWhereStatement(keyValue: object) {
+export function buildWhereStatement(
+  keyValue: object,
+  extraWhereStatement: any
+) {
   let whereStatement = "";
   let values = [] as string[];
   let attrs = [] as string[];
   Object.keys(keyValue).forEach((tableName) => {
     Object.keys(keyValue[tableName]).forEach((key) => {
-      let { value, include } = keyValue[tableName][key];
+      let { value, include, fuzzy } = keyValue[tableName][key];
       let col = tableName + "." + key;
       if (value instanceof Array) {
         let sub_attrs = [] as string[];
@@ -135,10 +145,14 @@ export function buildWhereStatement(keyValue: object) {
           attrs.push(col + " not in (" + sub_attrs.join(",") + ")");
         }
       } else {
-        if (include) {
-          attrs.push(col + "= ?");
+        if (fuzzy) {
+          attrs.push(col + "like %?%");
         } else {
-          attrs.push(col + "!= ?");
+          if (include) {
+            attrs.push(col + "= ?");
+          } else {
+            attrs.push(col + "!= ?");
+          }
         }
         values.push(filter.clean(String(value)));
       }
@@ -147,6 +161,12 @@ export function buildWhereStatement(keyValue: object) {
   if (attrs.length > 0) {
     whereStatement += " WHERE ";
     whereStatement += attrs.join(" AND ");
+  }
+  if (extraWhereStatement) {
+    for (const extra of extraWhereStatement) {
+      values.push(extra[0]);
+      whereStatement += extra[1];
+    }
   }
   return { whereStatement: whereStatement, values: values };
 }
@@ -180,14 +200,22 @@ export function buildStatementForQueryWithJoin(
   joinTables: string[],
   conditions: string[],
   whereKV: object,
+  extraWhereStatement: any = undefined,
   order_by: string = undefined,
   sort_by: string = "ASC",
   limit: number = undefined,
-  offset: number = undefined
+  offset: number = undefined,
+  count: boolean = false
 ) {
-  let statement = buildSelectStatement(selectKV);
+  let statement = buildCountStatement();
+  if (!count) {
+    statement = buildSelectStatement(selectKV);
+  }
   statement += buildFromStatement(joinTables, conditions);
-  const { whereStatement, values } = buildWhereStatement(whereKV);
+  const { whereStatement, values } = buildWhereStatement(
+    whereKV,
+    extraWhereStatement
+  );
   statement += whereStatement;
   statement += buildFilterStatement(order_by, sort_by, limit, offset);
   return { statement: statement, values: values };
@@ -199,7 +227,8 @@ export function buildStatementForQuery(
   order_by: string = undefined,
   sort_by: string = "ASC",
   limit: number = undefined,
-  offset: number = undefined
+  offset: number = undefined,
+  count: boolean = false
 ) {
   const selectKV = {};
   selectKV[table] = [];
@@ -210,10 +239,12 @@ export function buildStatementForQuery(
     [table],
     [],
     whereKV,
+    undefined,
     order_by,
     sort_by,
     limit,
-    offset
+    offset,
+    count
   );
 }
 

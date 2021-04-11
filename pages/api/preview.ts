@@ -8,7 +8,6 @@ const sendEmailHandler: NextApiHandler = async (req, res) => {
     return;
   }
   const { id, markdowns, subject } = req.body;
-  console.log(markdowns, subject);
   try {
     const rendered = await render(id, markdowns, subject);
     if (!rendered) {

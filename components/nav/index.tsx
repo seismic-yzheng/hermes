@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
 import Container from "react-bootstrap/Container";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Form from "react-bootstrap/Form";
+import TagsInput from "react-tagsinput";
+import "react-tagsinput/react-tagsinput.css";
 
 export default function TopNavbar(props) {
   const createButton = props.createButton;
@@ -14,6 +17,8 @@ export default function TopNavbar(props) {
   const previewButton = props.previewButton;
   const sending = props.sending;
   const sendButton = props.sendButton;
+  const setKeywords = props.setKeywords;
+  const keywords = props.keywords;
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
@@ -27,6 +32,41 @@ export default function TopNavbar(props) {
           </NavDropdown>
           <Nav.Link href="/build">Build</Nav.Link>
         </Nav>
+        {setKeywords && (
+          <div className="mr-auto" style={{ marginLeft: "-200px" }}>
+            <style jsx global>{`
+              .react-tagsinput-tag {
+                background-color: #e2e3e5;
+                border-radius: 2px;
+                border: 1px solid #d6d8db;
+                color: #383d41;
+                display: inline-block;
+                font-family: sans-serif;
+                font-size: 13px;
+                font-weight: 400;
+                margin-bottom: 5px;
+                margin-right: 5px;
+                padding: 5px;
+              }
+              .react-tagsinput-input {
+                background: transparent;
+                border: 0;
+                color: #777;
+                font-family: sans-serif;
+                font-size: 13px;
+                font-weight: 400;
+                outline: none;
+                padding: 5px;
+                width: 1200px;
+              }
+            `}</style>
+            <TagsInput
+              value={keywords}
+              onChange={(tags) => setKeywords(tags)}
+              inputProps={{ placeholder: "Search" }}
+            />
+          </div>
+        )}
         {createButton && (
           <div className="ml-2">
             <Button
