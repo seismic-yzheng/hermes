@@ -16,7 +16,8 @@ import {
   storeCategoryForTemplate,
   getCategoryForTemplate,
 } from "../../../lib/category";
-import { getTemplateById } from "../../../lib/template";
+import { deleteReviewByTemplate } from "../../../lib/review";
+import { getTemplateById, storeTemplate } from "../../../lib/template";
 
 const validID = async (id: number) => {
   if (!id) {
@@ -40,6 +41,7 @@ const deleteTemplate = async (req, res) => {
     }
     await deleteMarkdownByTemplate(id);
     await deleteCategoryByTemplate(id);
+    await deleteReviewByTemplate(id);
     let { statement, values } = buildStatementForDelete(templateTableName, id);
     await query(statement, values);
 
@@ -59,23 +61,61 @@ const validateTemplateByID = async (id: number) => {
   return true;
 };
 
+const _getTemplate = async (id) => {
+  const results = (await getTemplateById(id)) as any[];
+  if (results.length == 0) {
+    return null;
+  }
+  let result = results[0];
+  const markdowns = await getMarkdownForTemplate(result.id);
+  const categories = await getCategoryForTemplate(result.id);
+  result["markdowns"] = markdowns;
+  result["categories"] = categories;
+  return result;
+};
+
 const getTemplate = async (req, res) => {
   const { id } = req.query;
   try {
     if (!validID(id)) {
       return res.status(400).json({ message: "invalid `id`" });
     }
-    const results = (await getTemplateById(id)) as any[];
-    if (results.length == 0) {
+    const result = await _getTemplate(id);
+    if (!result) {
       res.status(404).json({ message: "template not found" });
       return;
     }
-    let result = results[0];
-    const markdowns = await getMarkdownForTemplate(result.id);
-    const categories = await getCategoryForTemplate(result.id);
-    result["markdowns"] = markdowns;
-    result["categories"] = categories;
     return res.json(result);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+    return;
+  }
+};
+
+const copyTemplate = async (req, res) => {
+  const { id, user } = req.query;
+  try {
+    if (!validID(id)) {
+      return res.status(400).json({ message: "invalid `id`" });
+    }
+    let kv = await _getTemplate(id);
+    if (!kv) {
+      res.status(404).json({ message: "template not found" });
+      return;
+    }
+    kv["creator"] = user;
+    kv["name"] = kv["name"] + " - copy";
+    kv["used"] = 0;
+    kv["likes"] = 0;
+    kv["total_rate"] = 0;
+    kv["rate_count"] = 0;
+    kv["rate"] = 0;
+    delete kv["created_at"];
+    if (kv["subject"] == null) {
+      delete kv["subject"];
+    }
+    const resultID = await storeTemplate(kv);
+    return res.json({ id: resultID });
   } catch (e) {
     res.status(500).json({ message: e.message });
     return;
@@ -99,6 +139,7 @@ const updateTemplate = async (req, res) => {
       "html",
       "design",
       "subject",
+      "shared",
     ]);
     let { statement, values } = buildStatementForUpdate(
       key_value,
@@ -140,6 +181,8 @@ const templateHandler: NextApiHandler = async (req, res) => {
   const method = req.method;
 
   switch (method) {
+    case "POST":
+      return await copyTemplate(req, res);
     case "GET":
       return await getTemplate(req, res);
     case "PUT":

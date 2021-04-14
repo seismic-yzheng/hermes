@@ -1,12 +1,48 @@
 import * as Mustache from "mustache";
-import { getMarkdownForTemplate } from "../lib/markdown";
+import {
+  getMarkdownForTemplate,
+  storeMarkdownForTemplate,
+} from "../lib/markdown";
+import { storeCategoryForTemplate } from "../lib/category";
 import { templateTableName } from "../lib/constants";
 import {
   query,
   buildStatementForQueryByID,
   buildStatementForUpdate,
+  buildStatementForInsert,
+  getColumnValue,
 } from "../lib/db";
 
+export async function storeTemplate(kv: object) {
+  const key_value = getColumnValue(kv, [
+    "name",
+    "creator",
+    "html",
+    "design",
+    "subject",
+    "shared",
+  ]);
+  const { statement, values } = buildStatementForInsert(
+    key_value,
+    templateTableName
+  );
+  const results = await query(statement, values);
+  const id = results["insertId"];
+  if ("markdowns" in kv && kv["markdowns"]) {
+    for (const markdown of kv["markdowns"]) {
+      const { name, type, default_value } = markdown;
+      if (name) {
+        await storeMarkdownForTemplate(name, type, id, default_value);
+      }
+    }
+  }
+  if ("categories" in kv && kv["categories"]) {
+    for (const category of Array.from(new Set(kv["categories"]))) {
+      await storeCategoryForTemplate(category as string, id);
+    }
+  }
+  return id;
+}
 export async function getTemplateById(id: number) {
   let { statement, values } = buildStatementForQueryByID(templateTableName, id);
   return await query(statement, values);

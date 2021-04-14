@@ -7,6 +7,7 @@ import CustomTagsInput from "@/components/tags-input";
 
 export default function TemplateSaveWindow(props) {
   const [name, setName] = useState("");
+  const [shared, setShared] = useState(1);
   const saveTemplate = props.saveTemplate;
   const handleClose = () => props.setShow(false);
   return (
@@ -26,7 +27,7 @@ export default function TemplateSaveWindow(props) {
         <div>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Name</InputGroup.Text>
+              <InputGroup.Text>Name</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               aria-label="Name"
@@ -41,9 +42,23 @@ export default function TemplateSaveWindow(props) {
             setCategories={props.setCategories}
           />
         </div>
+        <div>
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Share</InputGroup.Text>
+            </InputGroup.Prepend>
+            <InputGroup.Checkbox
+              aria-label="Checkbox for sharing"
+              checked={shared}
+              onChange={() => {
+                setShared(1 - shared);
+              }}
+            />
+          </InputGroup>
+        </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={(e) => saveTemplate(e, name)}>Save</Button>
+        <Button onClick={(e) => saveTemplate(e, name, shared)}>Save</Button>
         <Button onClick={handleClose}>Close</Button>
       </Modal.Footer>
     </Modal>

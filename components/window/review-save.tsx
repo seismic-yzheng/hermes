@@ -7,9 +7,11 @@ import Router from "next/router";
 import StarRatingComponent from "react-star-rating-component";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-export default function ReivewSaveWindow(props) {
+export default function ReviewSaveWindow(props) {
   const [review, setReview] = useState("");
   const [rate, setRate] = useState(0);
+  const handleClose = () =>
+    Router.push(`/templates?exclude_creators=user:1&shared=1`);
 
   const save = async () => {
     const res = await fetch("/api/review", {
@@ -27,13 +29,14 @@ export default function ReivewSaveWindow(props) {
     if (!res.ok) {
       props.setErrorWindowShow(true);
     } else {
-      Router.push(`/templates`);
+      Router.push(`/templates?exclude_creators=user:1&shared=1`);
     }
   };
 
   return (
     <Modal
       show={props.show}
+      onHide={handleClose}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -75,7 +78,13 @@ export default function ReivewSaveWindow(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={(e) => save()}>Submit</Button>
-        <Button onClick={(e) => Router.push(`/templates`)}>Skip</Button>
+        <Button
+          onClick={(e) =>
+            Router.push(`/templates?exclude_creators=user:1&shared=1`)
+          }
+        >
+          Skip
+        </Button>
       </Modal.Footer>
     </Modal>
   );

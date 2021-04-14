@@ -13,14 +13,20 @@ import { useClientRouter } from "use-client-router";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import Pagination from "react-bootstrap/Pagination";
+import { useRouter } from "next/router";
 
 import { getTemplates } from "@/lib/swr-hooks";
 
 export default function TemplatesPage(init_params) {
   let params_ = init_params["params"] || {};
   const limit = 5;
-  params_["limit"] = limit;
-  params_["offset"] = 0;
+  const user = "user:1";
+  if (!("limit" in params_)) {
+    params_["limit"] = limit;
+  }
+  if (!("offset" in params_)) {
+    params_["offset"] = 0;
+  }
 
   const [params, setParams] = useState(params_);
   const [sortBy, setSortBy] = useState("default");
@@ -130,7 +136,7 @@ export default function TemplatesPage(init_params) {
             </InputGroup>
           </Col>
         </Row>
-        <Templates templates={results} />
+        <Templates templates={results} user={user} />
         <Row>
           <Col xs={12} md={10}></Col>
           <Col xs={6} md={2} style={{ marginTop: 25 }}>
@@ -162,8 +168,6 @@ export default function TemplatesPage(init_params) {
 
 TemplatesPage.getInitialProps = async (ctx) => {
   let init_params = {};
-  if (ctx.query.user && ctx.query.user == "current") {
-    init_params["params"] = { creators: ["user:1"] };
-  }
+  init_params["params"] = ctx.query;
   return init_params;
 };

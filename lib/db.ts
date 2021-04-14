@@ -32,7 +32,8 @@ export function getColumnValue(key_value: object, columns: string[]) {
   let res = {};
   columns.forEach((item) => {
     if (item in key_value) {
-      if (key_value[item] instanceof Object) {
+      if (key_value[item] == null) {
+      } else if (key_value[item] instanceof Object) {
         res[item] = JSON.stringify(key_value[item]);
       } else {
         res[item] = key_value[item];

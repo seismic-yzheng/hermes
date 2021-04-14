@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-function Templates({ templates }) {
+function Templates({ templates, user }) {
   if (templates) {
     return (
       <Container>
@@ -16,7 +16,7 @@ function Templates({ templates }) {
         >
           {templates.map((e) => (
             <Col key={e.id} style={{ textAlign: "center", marginTop: 30 }}>
-              <Template template={e} />
+              <Template template={e} user={user} />
             </Col>
           ))}
         </Row>

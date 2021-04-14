@@ -31,7 +31,7 @@ async function createTemplateTable() {
     await query(`
     CREATE TABLE IF NOT EXISTS template (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(128) NOT NULL,
+      name VARCHAR(128) NOT NULL DEFAULT "",
       html TEXT NOT NULL,
       design JSON NOT NULL,
       subject TEXT DEFAULT NULL,
@@ -41,6 +41,7 @@ async function createTemplateTable() {
       total_rate FLOAT NOT NULL DEFAULT 0.0,
       rate_count INT NOT NULL DEFAULT 0,
       rate FLOAT NOT NULL DEFAULT 0.0,
+      shared BOOLEAN NOT NULL DEFAULT FALSE,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at
         TIMESTAMP

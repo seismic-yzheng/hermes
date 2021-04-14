@@ -25,15 +25,17 @@ export default function TopNavbar(props) {
         <Navbar.Brand href="/">Hermes</Navbar.Brand>
         <Nav className="mr-auto">
           <NavDropdown title="Templates" id="collasible-nav-dropdown">
-            <NavDropdown.Item href="/templates?user=current">
+            <NavDropdown.Item href="/templates?creators=user:1">
               My Templates
             </NavDropdown.Item>
-            <NavDropdown.Item href="/templates">All Templates</NavDropdown.Item>
+            <NavDropdown.Item href="/templates?exclude_creators=user:1&shared=1">
+              All Templates
+            </NavDropdown.Item>
           </NavDropdown>
           <Nav.Link href="/build">Build</Nav.Link>
         </Nav>
         {setKeywords && (
-          <div className="mr-auto" style={{ marginLeft: "-200px" }}>
+          <div>
             <style jsx global>{`
               .react-tagsinput-tag {
                 background-color: #e2e3e5;
@@ -57,7 +59,7 @@ export default function TopNavbar(props) {
                 font-weight: 400;
                 outline: none;
                 padding: 5px;
-                width: 1200px;
+                min-width: 200px;
               }
             `}</style>
             <TagsInput

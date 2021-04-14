@@ -67,7 +67,11 @@ const Markdowns = (props) => {
               placeholder="Default value"
               aria-label="Default value"
               aria-describedby="basic-addon2"
-              value={markdownList[i]["default_value"]}
+              value={
+                markdownList[i]["default_value"]
+                  ? markdownList[i]["default_value"]
+                  : undefined
+              }
               onChange={(e) => handleDefaultValueChange(e, i)}
             />
             <DropdownButton

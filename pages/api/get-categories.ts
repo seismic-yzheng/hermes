@@ -42,7 +42,7 @@ const getCategoriesHandler: NextApiHandler = async (req, res) => {
       });
     }
     // const categories = await getCategories(text);
-    const categories = [];
+    const categories = ["abc", "efg"];
     return res.json(categories);
   } catch (e) {
     console.error(e);

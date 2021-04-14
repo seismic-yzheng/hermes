@@ -27,6 +27,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
       exclude_names: { col: "name", include: false },
       creators: { col: "creator", include: true },
       exclude_creators: { col: "creator", include: false },
+      shared: { col: "shared", include: true },
     });
     let statement = undefined;
     let values = undefined;

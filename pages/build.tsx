@@ -68,7 +68,7 @@ const App = (props) => {
     });
   };
 
-  const exportHtml = async (event: any, name: any) => {
+  const exportHtml = async (event: any, name: any, shared: boolean = false) => {
     event.preventDefault();
     setCreating(true);
     setSaveWindowShow(false);
@@ -85,38 +85,14 @@ const App = (props) => {
         markdowns: markdownList,
         subject: subject,
         categories: categories,
+        shared: shared,
       }),
     });
 
     const json = await res.json();
     setCreating(false);
     if (!res.ok) throw Error(json.message);
-    Router.push(`/templates`);
-    /*try {
-      emailEditorRef.current.editor.exportHtml(async (data: any) => {
-        const { design, html } = data;
-        const res = await fetch("/api/template", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            creator: "user:1",
-            html: html,
-            design: design,
-            markdowns: markdownList,
-            subject: subject,
-          }),
-        });
-        setCreating(false);
-        const json = await res.json();
-        if (!res.ok) throw Error(json.message);
-        Router.push(`/templates`);
-      });
-    } catch (e) {
-      throw Error(e.message);
-    }*/
+    Router.push(`/templates?creators=user:1`);
   };
 
   const onLoad = () => {

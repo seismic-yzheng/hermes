@@ -17,7 +17,6 @@ const MarkdownForms = (props) => {
   };
 
   if (markdownValue) {
-    console.log(markdownValue);
     return (
       <div>
         <Alert variant="secondary">

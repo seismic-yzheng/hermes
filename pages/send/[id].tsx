@@ -7,7 +7,7 @@ import { useClientRouter } from "use-client-router";
 import TopNavBar from "components/nav";
 import MarkdownForms from "components/markdowns/form";
 import ServerErrorWindow from "components/window/server-error";
-import ReivewSaveWindow from "components/window/review-save";
+import ReviewSaveWindow from "components/window/review-save";
 import Router from "next/router";
 import EmailSendWindow from "components/window/send";
 import Subject from "components/subject";
@@ -18,6 +18,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Alert from "react-bootstrap/Alert";
 
 export default function EditTemplate() {
+  const user = "user:1";
   const [previewing, setPreviewing] = useState(false);
   const [sending, setSending] = useState(false);
   const router = useClientRouter();
@@ -75,7 +76,11 @@ export default function EditTemplate() {
     if (!res.ok) {
       setErrorWindowShow(true);
     } else {
-      setReviewWindowShow(true);
+      if (templateData.creator != user) {
+        setReviewWindowShow(true);
+      } else {
+        Router.push(`/templates?creators=user:1`);
+      }
     }
   };
 
@@ -108,7 +113,7 @@ export default function EditTemplate() {
           setShow={setSendWindowShow}
           sendEmail={send}
         />
-        <ReivewSaveWindow
+        <ReviewSaveWindow
           show={reviewWindowShow}
           id={templateData.id}
           setErrorWindowShow={setErrorWindowShow}

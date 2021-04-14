@@ -4,25 +4,30 @@ import { mutate } from "swr";
 
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import StarRatingComponent from "react-star-rating-component";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaFireAlt } from "react-icons/fa";
 
-function Template({ template }) {
-  const [deleting, setDeleting] = useState(false);
-
+function Template({ template, user }) {
   async function deleteTemplate() {
-    setDeleting(true);
     let res = await fetch(`/api/template/${template.id}`, {
       method: "DELETE",
     });
     let json = await res.json();
     if (!res.ok) throw Error(json.message);
-    mutate("/api/templates/");
-    setDeleting(false);
+    Router.reload();
+  }
+
+  async function copyTemplate(id, user) {
+    let res = await fetch("/api/template/" + id + "?user=" + user, {
+      method: "POST",
+    });
+    let json = await res.json();
+    if (!res.ok) throw Error(json.message);
+    Router.push("/edit/" + json["id"]);
   }
   return (
     <Card>
@@ -61,9 +66,18 @@ function Template({ template }) {
             </span>
           </span>
         </div>
-        <Card.Link href={`/edit/${template.id}`}>Edit</Card.Link>
+        {user == template.creator && (
+          <Card.Link href={`/edit/${template.id}`}>Edit</Card.Link>
+        )}
+        {user != template.creator && (
+          <Card.Link href="#" onClick={() => copyTemplate(template.id, user)}>
+            Copy
+          </Card.Link>
+        )}
         <Card.Link href={`/send/${template.id}`}>View</Card.Link>
-        <Card.Link onClick={deleteTemplate}>Delete</Card.Link>
+        <Card.Link href="#" onClick={() => deleteTemplate()}>
+          Delete
+        </Card.Link>
       </Card.Body>
     </Card>
   );

@@ -9,6 +9,7 @@ import { useClientRouter } from "use-client-router";
 import Router from "next/router";
 import TopNavBar from "components/nav";
 import Subject from "components/subject";
+import Name from "components/name";
 import InputGroup from "react-bootstrap/InputGroup";
 import CustomTagsInput from "@/components/tags-input";
 
@@ -26,6 +27,8 @@ export default function EditTemplate() {
   ]);
   const [categories, setCategories] = useState([]);
   const [subject, setSubject] = useState("");
+  const [name, setName] = useState("");
+  const [shared, setShared] = useState(1);
 
   const saveHtml = async (event: any) => {
     setSaving(true);
@@ -44,12 +47,14 @@ export default function EditTemplate() {
             markdowns: markdownList,
             subject: subject,
             categories: categories,
+            name: name,
+            shared: shared,
           }),
         });
         setSaving(false);
         const json = await res.json();
         if (!res.ok) throw Error(json.message);
-        Router.push(`/templates`);
+        Router.push(`/templates?creators=user:1`);
       });
     } catch (e) {
       throw Error(e.message);
@@ -64,6 +69,8 @@ export default function EditTemplate() {
       setCategories(templateData.categories);
     }
     setSubject(templateData.subject);
+    setName(templateData.name);
+    setShared(templateData.shared);
     if (emailEditorRef.current) {
       emailEditorRef.current.editor.loadDesign(JSON.parse(templateData.design));
     } else {
@@ -78,6 +85,7 @@ export default function EditTemplate() {
         <Container fluid>
           <Row style={{ marginTop: "10px" }}>
             <Col xs={6} md={4}>
+              <Name setName={setName} name={name} />
               <Subject setSubject={setSubject} subject={subject} />
               <hr />
               <Markdowns
@@ -89,6 +97,18 @@ export default function EditTemplate() {
                 categories={categories}
                 setCategories={setCategories}
               />
+              <InputGroup className="mb-2">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Share</InputGroup.Text>
+                </InputGroup.Prepend>
+                <InputGroup.Checkbox
+                  aria-label="Checkbox for sharing"
+                  checked={shared}
+                  onChange={() => {
+                    setShared(1 - shared);
+                  }}
+                />
+              </InputGroup>
             </Col>
             <Col xs={6} md={8}>
               <EmailEditor
