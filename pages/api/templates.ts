@@ -40,7 +40,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
       for (const keyword of keywords) {
         extraWhereStatement.push([
           "%" + keyword + "%",
-          " or template.name like ?",
+          " OR template.name like ?",
         ]);
       }
     }
@@ -57,11 +57,14 @@ const templatesHandler: NextApiHandler = async (req, res) => {
         ],
         {
           category: {
-            name: { value: req.query["categories"], include: true },
+            name: {
+              value: req.query["categories"],
+              include: true,
+              extraWhereStatement: extraWhereStatement,
+            },
           },
           template: key_value,
         },
-        extraWhereStatement,
         order_by,
         sort_by,
         limit,
@@ -78,16 +81,19 @@ const templatesHandler: NextApiHandler = async (req, res) => {
         ],
         {
           category: {
-            name: { value: req.query["categories"], include: true },
+            name: {
+              value: req.query["categories"],
+              include: true,
+              extraWhereStatement: extraWhereStatement,
+            },
           },
           template: key_value,
         },
-        extraWhereStatement,
         order_by,
         sort_by,
         undefined,
         undefined,
-        true
+        "template.id"
       );
       count_statement = count_res["statement"];
       count_values = count_res["values"];
@@ -109,7 +115,7 @@ const templatesHandler: NextApiHandler = async (req, res) => {
         sort_by,
         undefined,
         undefined,
-        true
+        "template.id"
       );
       count_statement = count_res["statement"];
       count_values = count_res["values"];
@@ -120,7 +126,11 @@ const templatesHandler: NextApiHandler = async (req, res) => {
       const markdown = await getMarkdownForTemplate(result.id);
       result["markdowns"] = markdown;
     }
-    return res.json({ count: count[0]["COUNT(*)"], results: results });
+
+    return res.json({
+      count: count[0]["COUNT(DISTINCT template.id)"],
+      results: results,
+    });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: e.message });

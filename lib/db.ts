@@ -92,7 +92,10 @@ WHERE template.name = test16156640191948947;
 
 */
 
-export function buildSelectStatement(keyValue: object) {
+export function buildSelectStatement(
+  keyValue: object,
+  distinct: Boolean = true
+) {
   let values = [] as string[];
   Object.keys(keyValue).forEach((tableName) => {
     let select = [] as string[];
@@ -105,11 +108,20 @@ export function buildSelectStatement(keyValue: object) {
       values.push(tableName + ".*");
     }
   });
+  if (distinct) {
+    return "SELECT DISTINCT " + values.join(" , ");
+  }
   return "SELECT " + values.join(" , ");
 }
 
-export function buildCountStatement() {
-  return "SELECT COUNT(*) ";
+export function buildCountStatement(
+  count_col: String,
+  distinct: Boolean = true
+) {
+  if (distinct) {
+    return "SELECT COUNT(DISTINCT " + count_col + ") ";
+  }
+  return "SELECT COUNT(" + count_col + ") ";
 }
 
 export function buildFromStatement(tables: string[], conditions: string[]) {
@@ -123,16 +135,13 @@ export function buildFromStatement(tables: string[], conditions: string[]) {
   return statement;
 }
 
-export function buildWhereStatement(
-  keyValue: object,
-  extraWhereStatement: any
-) {
+export function buildWhereStatement(keyValue: object) {
   let whereStatement = "";
   let values = [] as string[];
   let attrs = [] as string[];
   Object.keys(keyValue).forEach((tableName) => {
     Object.keys(keyValue[tableName]).forEach((key) => {
-      let { value, include, fuzzy } = keyValue[tableName][key];
+      let { value, include, extraWhereStatement } = keyValue[tableName][key];
       let col = tableName + "." + key;
       if (value instanceof Array) {
         let sub_attrs = [] as string[];
@@ -146,28 +155,24 @@ export function buildWhereStatement(
           attrs.push(col + " not in (" + sub_attrs.join(",") + ")");
         }
       } else {
-        if (fuzzy) {
-          attrs.push(col + "like %?%");
+        if (include) {
+          attrs.push(col + "= ?");
         } else {
-          if (include) {
-            attrs.push(col + "= ?");
-          } else {
-            attrs.push(col + "!= ?");
-          }
+          attrs.push(col + "!= ?");
         }
         values.push(filter.clean(String(value)));
+      }
+      if (extraWhereStatement) {
+        for (const extra of extraWhereStatement) {
+          attrs[attrs.length - 1] += extra[1];
+          values.push(filter.clean(String(extra[0])));
+        }
       }
     });
   });
   if (attrs.length > 0) {
     whereStatement += " WHERE ";
     whereStatement += attrs.join(" AND ");
-  }
-  if (extraWhereStatement) {
-    for (const extra of extraWhereStatement) {
-      values.push(extra[0]);
-      whereStatement += extra[1];
-    }
   }
   return { whereStatement: whereStatement, values: values };
 }
@@ -201,22 +206,20 @@ export function buildStatementForQueryWithJoin(
   joinTables: string[],
   conditions: string[],
   whereKV: object,
-  extraWhereStatement: any = undefined,
   order_by: string = undefined,
   sort_by: string = "ASC",
   limit: number = undefined,
   offset: number = undefined,
-  count: boolean = false
+  count_col: string = undefined
 ) {
-  let statement = buildCountStatement();
-  if (!count) {
+  let statement = undefined;
+  if (count_col) {
+    statement = buildCountStatement(count_col);
+  } else {
     statement = buildSelectStatement(selectKV);
   }
   statement += buildFromStatement(joinTables, conditions);
-  const { whereStatement, values } = buildWhereStatement(
-    whereKV,
-    extraWhereStatement
-  );
+  const { whereStatement, values } = buildWhereStatement(whereKV);
   statement += whereStatement;
   statement += buildFilterStatement(order_by, sort_by, limit, offset);
   return { statement: statement, values: values };
@@ -229,7 +232,7 @@ export function buildStatementForQuery(
   sort_by: string = "ASC",
   limit: number = undefined,
   offset: number = undefined,
-  count: boolean = false
+  count_col: string = undefined
 ) {
   const selectKV = {};
   selectKV[table] = [];
@@ -240,12 +243,11 @@ export function buildStatementForQuery(
     [table],
     [],
     whereKV,
-    undefined,
     order_by,
     sort_by,
     limit,
     offset,
-    count
+    count_col
   );
 }
 

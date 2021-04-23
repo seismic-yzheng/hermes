@@ -75,9 +75,11 @@ function Template({ template, user }) {
           </Card.Link>
         )}
         <Card.Link href={`/send/${template.id}`}>View</Card.Link>
-        <Card.Link href="#" onClick={() => deleteTemplate()}>
-          Delete
-        </Card.Link>
+        {user == template.creator && (
+          <Card.Link href="#" onClick={() => deleteTemplate()}>
+            Delete
+          </Card.Link>
+        )}
       </Card.Body>
     </Card>
   );

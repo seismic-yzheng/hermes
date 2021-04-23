@@ -18,28 +18,25 @@ describe("test for build query statement", () => {
       "testCategory",
     ];
 
-    const { whereStatement, values } = buildWhereStatement(
-      {
-        template: {
-          name: { value: "testTemplate", include: true },
-          creator: { value: ["user:1", "user:2"], include: true },
-        },
-        template_category: { id: { value: "12345", include: false } },
-        category: { name: { value: "testCategory", include: true } },
+    const { whereStatement, values } = buildWhereStatement({
+      template: {
+        name: { value: "testTemplate", include: true },
+        creator: { value: ["user:1", "user:2"], include: true },
       },
-      undefined
-    );
+      template_category: { id: { value: "12345", include: false } },
+      category: { name: { value: "testCategory", include: true } },
+    });
     expect(whereStatement).toBe(expect_statement);
     expect(values).toEqual(expect_values);
   });
   test("build empty where statement", async () => {
-    const { whereStatement, values } = buildWhereStatement({}, undefined);
+    const { whereStatement, values } = buildWhereStatement({});
     expect(whereStatement).toBe("");
     expect(values).toEqual([]);
   });
   test("build select statement", async () => {
     const expect_statement =
-      "SELECT template.id , template.name , category.name , template_category.*";
+      "SELECT DISTINCT template.id , template.name , category.name , template_category.*";
     const statement = buildSelectStatement({
       template: ["id", "name"],
       category: ["name"],
@@ -61,7 +58,7 @@ describe("test for build query statement", () => {
   });
   test("build query statement with join", async () => {
     const expect_statement =
-      "SELECT template.* , category.* FROM template " +
+      "SELECT DISTINCT template.* , category.* FROM template " +
       "LEFT JOIN template_category " +
       "ON template.id = template_category.template_id " +
       "LEFT JOIN category " +
@@ -83,7 +80,6 @@ describe("test for build query statement", () => {
           name: { value: "testName", include: true },
         },
       },
-      undefined,
       "template.created_at",
       "ASC",
       10,
@@ -94,7 +90,7 @@ describe("test for build query statement", () => {
   });
   test("build query statement without join", async () => {
     const expect_statement =
-      "SELECT template.* FROM template " +
+      "SELECT DISTINCT template.* FROM template " +
       "WHERE template.name= ? " +
       "ORDER BY created_at ASC " +
       "LIMIT 10 " +

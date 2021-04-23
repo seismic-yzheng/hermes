@@ -103,6 +103,7 @@ export default function TemplatesPage(init_params) {
     } else {
       delete new_params["keywords"];
     }
+    new_params["offset"] = 0;
     setParams(new_params);
   };
 
