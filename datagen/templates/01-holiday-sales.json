@@ -1,0 +1,386 @@
+{
+  "name": "Event deals",
+  "design": {
+    "body": {
+      "rows": [
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_1", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "hideDesktop": false,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "https://cdn.templates.unlayer.com/assets/1594896276840-1.png",
+              "cover": false,
+              "width": 600,
+              "center": true,
+              "height": 890,
+              "repeat": true,
+              "fullWidth": false
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": "#e03e2d"
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_1",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {
+                  "borderTopColor": "#000000",
+                  "borderTopStyle": "solid",
+                  "borderTopWidth": "8px",
+                  "borderLeftColor": "#000000",
+                  "borderLeftStyle": "solid",
+                  "borderLeftWidth": "8px",
+                  "borderRightColor": "#000000",
+                  "borderRightStyle": "solid",
+                  "borderRightWidth": "8px",
+                  "borderBottomColor": "#000000",
+                  "borderBottomStyle": "solid",
+                  "borderBottomWidth": "0px"
+                },
+                "padding": "0px",
+                "backgroundColor": ""
+              },
+              "contents": [
+                {
+                  "type": "image",
+                  "values": {
+                    "src": {
+                      "url": "https://cdn.templates.unlayer.com/assets/1594896352794-a.png",
+                      "width": 204,
+                      "height": 55,
+                      "maxWidth": "25%",
+                      "autoWidth": false
+                    },
+                    "_meta": {
+                      "htmlID": "u_content_image_1",
+                      "htmlClassNames": "u_content_image"
+                    },
+                    "action": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "altText": "Image",
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "25px 10px 10px"
+                  }
+                },
+                {
+                  "type": "divider",
+                  "values": {
+                    "_meta": {
+                      "htmlID": "u_content_divider_1",
+                      "htmlClassNames": "u_content_divider"
+                    },
+                    "width": "100%",
+                    "border": {
+                      "borderTopColor": "#e03e2d",
+                      "borderTopStyle": "solid",
+                      "borderTopWidth": "1px"
+                    },
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "42px"
+                  }
+                },
+                {
+                  "type": "divider",
+                  "values": {
+                    "_meta": {
+                      "htmlID": "u_content_divider_2",
+                      "htmlClassNames": "u_content_divider"
+                    },
+                    "width": "100%",
+                    "border": {
+                      "borderTopColor": "#e03e2d",
+                      "borderTopStyle": "solid",
+                      "borderTopWidth": "1px"
+                    },
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "71px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 100%; text-align: center;\"><strong><span style=\"font-size: 44px; line-height: 44px;\">{{event}}</span></strong></p>\n<p style=\"font-size: 14px; line-height: 100%; text-align: center;\"><strong><span style=\"font-size: 72px; line-height: 72px;\">DEALS</span></strong></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_1",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "100%",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "10px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%; text-align: center;\"><span style=\"font-size: 48px; line-height: 67.2px;\">{{discount}} % OFF</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_2",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "10px 10px 0px"
+                  }
+                },
+                {
+                  "type": "button",
+                  "values": {
+                    "href": {
+                      "name": "web",
+                      "attrs": { "href": "{{href}}", "target": "{{target}}" },
+                      "values": { "href": "{{event_url}}", "target": "_blank" }
+                    },
+                    "size": { "width": "100%", "autoWidth": true },
+                    "text": "<strong><span style=\"font-size: 14px; line-height: 16.8px;\">GRAB THE DEAL</span></strong>",
+                    "_meta": {
+                      "htmlID": "u_content_button_1",
+                      "htmlClassNames": "u_content_button"
+                    },
+                    "border": {},
+                    "padding": "10px 50px",
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "lineHeight": "120%",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "borderRadius": "4px",
+                    "buttonColors": {
+                      "color": "#FFFFFF",
+                      "hoverColor": "#FFFFFF",
+                      "backgroundColor": "#f1c40f",
+                      "hoverBackgroundColor": "#3AAEE0"
+                    },
+                    "duplicatable": true,
+                    "calculatedWidth": 216,
+                    "calculatedHeight": 36,
+                    "containerPadding": "10px"
+                  }
+                },
+                {
+                  "type": "divider",
+                  "values": {
+                    "_meta": {
+                      "htmlID": "u_content_divider_3",
+                      "htmlClassNames": "u_content_divider"
+                    },
+                    "width": "100%",
+                    "border": {
+                      "borderTopColor": "#e03e2d",
+                      "borderTopStyle": "solid",
+                      "borderTopWidth": "1px"
+                    },
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "60px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">*Valid Till: {{due}}</p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_3",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "10px 10px 17px 20px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_3", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "hideDesktop": false,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": "#000000"
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_3",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": ""
+              },
+              "contents": [
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%; text-align: center;\">&copy; Shop. &nbsp;All Rights Reserved&nbsp;</p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_5",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#7e8c8d",
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "40px"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "values": {
+        "_meta": { "htmlID": "u_body", "htmlClassNames": "u_body" },
+        "linkStyle": {
+          "body": true,
+          "linkColor": "#0000ee",
+          "linkUnderline": true,
+          "linkHoverColor": "#0000ee",
+          "linkHoverUnderline": true
+        },
+        "fontFamily": {
+          "label": "Arial",
+          "value": "arial,helvetica,sans-serif"
+        },
+        "contentAlign": "center",
+        "contentWidth": "500px",
+        "preheaderText": "",
+        "backgroundColor": "#e7e7e7",
+        "backgroundImage": {
+          "url": "",
+          "cover": false,
+          "center": true,
+          "repeat": false,
+          "fullWidth": true
+        }
+      }
+    },
+    "counters": {
+      "u_row": 3,
+      "u_column": 3,
+      "u_content_text": 5,
+      "u_content_image": 1,
+      "u_content_button": 1,
+      "u_content_divider": 3
+    },
+    "schemaVersion": 5
+  },
+  "subject": "{{event}} DEALS",
+  "creator": "user:1",
+  "likes": 52,
+  "used": 100,
+  "total_rate": 500,
+  "rate_count": 100,
+  "rate": 5,
+  "shared": 1,
+  "category": ["business", "sales"],
+  "markdown": [
+    { "name": "event", "type": "string" },
+    { "name": "discount", "type": "string" },
+    { "name": "due", "type": "string" },
+    { "name": "event_url", "type": "string" }
+  ],
+  "review": [
+    { "review": "Good template!", "rate": 5, "user": "user:2" },
+    { "review": "Very useful!", "rate": 5, "user": "user:3" }
+  ]
+}
