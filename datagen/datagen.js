@@ -39,6 +39,7 @@ async function createReview(template_id, reviews) {
     );
   }
 }
+
 async function createMarkdown(template_id, markdowns) {
   for (markdown of markdowns) {
     const { name, type, default_value } = markdown;
@@ -59,7 +60,7 @@ async function createMarkdown(template_id, markdowns) {
     if (default_value) {
       await query(
         "INSERT INTO template_markdown (template_id, markdown_id, default_value) VALUES (?, ?, ?)",
-        [type, name, default_value]
+        [template_id, id, default_value]
       );
     } else {
       await query(
@@ -69,6 +70,24 @@ async function createMarkdown(template_id, markdowns) {
     }
   }
 }
+
+async function createCategory(template_id, categories) {
+  for (category of categories) {
+    let id;
+    let res = await query("SELECT * FROM category WHERE name=?", [category]);
+    if (Object.keys(res).length == 0) {
+      res = await query("INSERT INTO category (name) VALUES (?)", [category]);
+      id = res["insertId"];
+    } else {
+      id = res[0].id;
+    }
+    await query(
+      "INSERT INTO template_category (template_id, category_id) VALUES (?, ?)",
+      [template_id, id]
+    );
+  }
+}
+
 async function createTemplate(
   name,
   design,
@@ -123,6 +142,7 @@ async function datagen() {
       );
       console.log(template_id);
       await createMarkdown(template_id, data["markdowns"]);
+      await createCategory(template_id, data["categories"]);
       await createReview(template_id, data["reviews"]);
     } catch (e) {
       throw Error(e.message);
