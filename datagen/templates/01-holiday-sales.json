@@ -373,13 +373,13 @@
   "rate": 5,
   "shared": 1,
   "category": ["business", "sales"],
-  "markdown": [
+  "markdowns": [
     { "name": "event", "type": "string" },
     { "name": "discount", "type": "string" },
     { "name": "due", "type": "string" },
     { "name": "event_url", "type": "string" }
   ],
-  "review": [
+  "reviews": [
     { "review": "Good template!", "rate": 5, "user": "user:2" },
     { "review": "Very useful!", "rate": 5, "user": "user:3" }
   ]

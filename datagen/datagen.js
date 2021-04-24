@@ -30,6 +30,45 @@ async function query(q, values) {
 const dir = "./datagen/templates/";
 const htmlDir = "./datagen/html/";
 
+async function createReview(template_id, reviews) {
+  for (review_item of reviews) {
+    const { review, rate, user } = review_item;
+    await query(
+      "INSERT INTO review (review, rate, user, template_id) VALUES (?, ?, ?, ?)",
+      [review, rate, user, template_id]
+    );
+  }
+}
+async function createMarkdown(template_id, markdowns) {
+  for (markdown of markdowns) {
+    const { name, type, default_value } = markdown;
+    let id;
+    let res = await query("SELECT * FROM markdown WHERE type=? AND name=?", [
+      name,
+      type,
+    ]);
+    if (Object.keys(res).length == 0) {
+      res = await query("INSERT INTO markdown (type, name) VALUES (?, ?)", [
+        type,
+        name,
+      ]);
+      id = res["insertId"];
+    } else {
+      id = res[0].id;
+    }
+    if (default_value) {
+      await query(
+        "INSERT INTO template_markdown (template_id, markdown_id, default_value) VALUES (?, ?, ?)",
+        [type, name, default_value]
+      );
+    } else {
+      await query(
+        "INSERT INTO template_markdown (template_id, markdown_id) VALUES (?, ?)",
+        [template_id, id]
+      );
+    }
+  }
+}
 async function createTemplate(
   name,
   design,
@@ -69,9 +108,8 @@ async function datagen() {
     const html = await fs.readFile(
       htmlDir + file.substr(0, file.lastIndexOf(".")) + ".html"
     );
-    console.log("create");
     try {
-      const id = await createTemplate(
+      const template_id = await createTemplate(
         data["name"],
         data["design"],
         data["subject"],
@@ -83,7 +121,9 @@ async function datagen() {
         data["shared"],
         html
       );
-      console.log(id);
+      console.log(template_id);
+      await createMarkdown(template_id, data["markdowns"]);
+      await createReview(template_id, data["reviews"]);
     } catch (e) {
       throw Error(e.message);
     }
@@ -91,134 +131,3 @@ async function datagen() {
 }
 
 datagen().then(() => process.exit());
-// async function datagen(){
-//     for (file of fs.readdirSync(dir)) {
-//     fs.readFile(dir + file, (err, fileData) => {
-// const data = JSON.parse(fileData);
-//             const id = await createTemplate(
-//                 data["name"],
-//                  data["design"],
-//                 data["subject"],
-//                 data["creator"],
-//                 data["likes"],
-//                 data["used"],
-//                 data["total_rate"],
-//                 data["rate_count"],
-//                 data["shared"]
-//             )
-//     });
-//     }
-// }
-
-// datagen().then(() => process.exit());
-// // Create "entries" table if doesn't exist
-// async function createTemplateTable() {
-//   try {
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS template (
-//       id INT AUTO_INCREMENT PRIMARY KEY,
-//       name VARCHAR(128) NOT NULL DEFAULT "",
-//       html TEXT NOT NULL,
-//       design JSON NOT NULL,
-//       subject TEXT DEFAULT NULL,
-//       creator VARCHAR(32) NOT NULL,
-//       likes INT NOT NULL DEFAULT 0,
-//       used INT NOT NULL DEFAULT 0,
-//       total_rate FLOAT NOT NULL DEFAULT 0.0,
-//       rate_count INT NOT NULL DEFAULT 0,
-//       rate FLOAT NOT NULL DEFAULT 0.0,
-//       shared BOOLEAN NOT NULL DEFAULT FALSE,
-//       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//       updated_at
-//         TIMESTAMP
-//         NOT NULL
-//         DEFAULT CURRENT_TIMESTAMP
-//         ON UPDATE CURRENT_TIMESTAMP
-//     )
-//     `);
-//   } catch (e) {
-//     console.log(e.message);
-//     process.exit(1);
-//   }
-// }
-
-// async function createMarkdownTable() {
-//   try {
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS markdown (
-//       id INT AUTO_INCREMENT,
-//       type VARCHAR(16) NOT NULL,
-//       name VARCHAR(128) NOT NULL,
-//       PRIMARY KEY (id)
-//     )
-//     `);
-
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS template_markdown (
-//       template_id INT NOT NULL,
-//       markdown_id INT NOT NULL,
-//       default_value VARCHAR(128) DEFAULT NULL,
-//       PRIMARY KEY (template_id, markdown_id),
-//       FOREIGN KEY (template_id) REFERENCES template(id),
-//       FOREIGN KEY (markdown_id) REFERENCES markdown(id)
-//     )
-//     `);
-//   } catch (e) {
-//     console.log(e.message);
-//     process.exit(1);
-//   }
-// }
-
-// async function createCategoryTable() {
-//   try {
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS category (
-//       id INT AUTO_INCREMENT,
-//       name VARCHAR(128) NOT NULL,
-//       PRIMARY KEY (id)
-//     )
-//     `);
-
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS template_category (
-//       template_id INT NOT NULL,
-//       category_id INT NOT NULL,
-//       PRIMARY KEY (template_id, category_id),
-//       FOREIGN KEY (template_id) REFERENCES template(id),
-//       FOREIGN KEY (category_id) REFERENCES category(id)
-//     )
-//     `);
-//   } catch (e) {
-//     console.log(e.message);
-//     process.exit(1);
-//   }
-// }
-
-// async function createReviewTable() {
-//   try {
-//     await query(`
-//     CREATE TABLE IF NOT EXISTS review (
-//       id INT AUTO_INCREMENT,
-//       review TEXT NOT NULL,
-//       rate FLOAT NOT NULL DEFAULT 0.0,
-//       user VARCHAR(128) NOT NULL,
-//       template_id INT NOT NULL,
-//       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//       FOREIGN KEY (template_id) REFERENCES template(id),
-//       PRIMARY KEY (id)
-//     )
-//     `);
-//   } catch (e) {
-//     console.log(e.message);
-//     process.exit(1);
-//   }
-// }
-
-// async function migrate() {
-//   await createTemplateTable();
-//   await createMarkdownTable();
-//   await createCategoryTable();
-//   await createReviewTable();
-//   console.log("migration ran successfully");
-// }
-// migrate().then(() => process.exit());
