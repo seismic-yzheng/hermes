@@ -1,0 +1,446 @@
+{
+  "name": "Referral",
+  "design": {
+    "body": {
+      "rows": [
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_1", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "hideDesktop": false,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": "#1c00cf"
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_1",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": ""
+              },
+              "contents": [
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><strong><span style=\"font-size: 22px; line-height: 30.8px;\">Congratulations,</span></strong></p>\n<p style=\"font-size: 14px; line-height: 140%;\"><strong><span style=\"font-size: 22px; line-height: 30.8px;\">You got ${{referral}}!</span></strong></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_1",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#e03e2d",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "24px 10px 10px 31px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Thanks for sharing!&nbsp;</span></p>\n<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Your friend just made their first order using your referral code. $10 is yours, fair and square.</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_2",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px 20px 20px 30px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_2", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": ""
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_2",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#1c00cf"
+              },
+              "contents": [
+                {
+                  "type": "button",
+                  "values": {
+                    "href": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "size": { "width": "100%", "autoWidth": true },
+                    "text": "<span style=\"font-size: 14px; line-height: 16.8px;\">GO TO DASHBOARD</span>",
+                    "_meta": {
+                      "htmlID": "u_content_button_1",
+                      "htmlClassNames": "u_content_button"
+                    },
+                    "border": {
+                      "borderTopColor": "#CCC",
+                      "borderTopStyle": "solid",
+                      "borderTopWidth": "0px",
+                      "borderLeftColor": "#CCC",
+                      "borderLeftStyle": "solid",
+                      "borderLeftWidth": "0px",
+                      "borderRightColor": "#CCC",
+                      "borderRightStyle": "solid",
+                      "borderRightWidth": "0px",
+                      "borderBottomColor": "#CCC",
+                      "borderBottomStyle": "solid",
+                      "borderBottomWidth": "0px"
+                    },
+                    "padding": "10px 20px",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "left",
+                    "lineHeight": "120%",
+                    "selectable": true,
+                    "borderRadius": "15px",
+                    "buttonColors": {
+                      "color": "#FFFFFF",
+                      "hoverColor": "#FFFFFF",
+                      "backgroundColor": "#e03e2d",
+                      "hoverBackgroundColor": "#3AAEE0"
+                    },
+                    "duplicatable": true,
+                    "calculatedWidth": 177,
+                    "calculatedHeight": 36,
+                    "containerPadding": "10px 10px 17px 28px"
+                  }
+                },
+                {
+                  "type": "image",
+                  "values": {
+                    "src": {
+                      "url": "https://cdn.templates.unlayer.com/assets/1594085717455-dag.png",
+                      "width": 1198,
+                      "height": 176
+                    },
+                    "_meta": {
+                      "htmlID": "u_content_image_1",
+                      "htmlClassNames": "u_content_image"
+                    },
+                    "action": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "altText": "Image",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "0px"
+                  }
+                },
+                {
+                  "type": "image",
+                  "values": {
+                    "src": {
+                      "url": "https://cdn.templates.unlayer.com/assets/1594086443241-ff.jpg",
+                      "width": 650,
+                      "height": 356
+                    },
+                    "_meta": {
+                      "htmlID": "u_content_image_2",
+                      "htmlClassNames": "u_content_image"
+                    },
+                    "action": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "altText": "Image",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "0px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_3", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": ""
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_3",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#4e19fd"
+              },
+              "contents": [
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 24px; line-height: 33.6px;\">Easy, right?&nbsp;</span></p>\n<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 24px; line-height: 33.6px;\">Invite more and get more!</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_3",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px 10px 10px 25px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 16px; line-height: 22.4px;\">You'll get $10 each time a new friend places their first order with your code: &nbsp;XXXXX</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_4",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#ffffff",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px 10px 10px 25px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_4", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "duplicatable": true,
+            "backgroundColor": "",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": ""
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_4",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#4e19fd"
+              },
+              "contents": [
+                {
+                  "type": "button",
+                  "values": {
+                    "href": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "size": { "width": "100%", "autoWidth": true },
+                    "text": "<span style=\"font-size: 14px; line-height: 16.8px;\">LET'S ROLL</span>",
+                    "_meta": {
+                      "htmlID": "u_content_button_2",
+                      "htmlClassNames": "u_content_button"
+                    },
+                    "border": {},
+                    "padding": "10px 20px",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "lineHeight": "120%",
+                    "selectable": true,
+                    "borderRadius": "4px",
+                    "buttonColors": {
+                      "color": "#FFFFFF",
+                      "hoverColor": "#FFFFFF",
+                      "backgroundColor": "#3AAEE0",
+                      "hoverBackgroundColor": "#3AAEE0"
+                    },
+                    "duplicatable": true,
+                    "calculatedWidth": 118,
+                    "calculatedHeight": 36,
+                    "containerPadding": "21px"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "values": {
+        "_meta": { "htmlID": "u_body", "htmlClassNames": "u_body" },
+        "linkStyle": {
+          "body": true,
+          "linkColor": "#0000ee",
+          "linkUnderline": true,
+          "linkHoverColor": "#0000ee",
+          "linkHoverUnderline": true
+        },
+        "fontFamily": {
+          "label": "Arial",
+          "value": "arial,helvetica,sans-serif"
+        },
+        "contentAlign": "center",
+        "contentWidth": "500px",
+        "preheaderText": "",
+        "backgroundColor": "#e7e7e7",
+        "backgroundImage": {
+          "url": "",
+          "cover": false,
+          "center": true,
+          "repeat": false,
+          "fullWidth": true
+        }
+      }
+    },
+    "counters": {
+      "u_row": 4,
+      "u_column": 4,
+      "u_content_text": 4,
+      "u_content_image": 2,
+      "u_content_button": 2
+    },
+    "schemaVersion": 5
+  },
+  "subject": "Get ${{referral}} for referral!",
+  "creator": "user:3",
+  "likes": 1132,
+  "used": 1123,
+  "total_rate": 30000,
+  "rate_count": 10000,
+  "rate": 3,
+  "shared": 1,
+  "categories": ["referral"],
+  "markdowns": [{ "name": "referral", "type": "string" }],
+  "reviews": [
+    { "review": "Good template!", "rate": 5, "user": "user:2" },
+    { "review": "Very useful!", "rate": 5, "user": "user:3" }
+  ]
+}
