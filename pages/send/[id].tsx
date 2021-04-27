@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,7 +14,6 @@ import Subject from "components/subject";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import Review from "components/review";
-import InputGroup from "react-bootstrap/InputGroup";
 import Alert from "react-bootstrap/Alert";
 
 export default function EditTemplate() {

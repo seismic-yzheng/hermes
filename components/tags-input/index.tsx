@@ -1,7 +1,6 @@
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
 
 export default function CustomTagsInput(props) {
   return (

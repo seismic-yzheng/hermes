@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import Button from "@/components/button";
+import React, { useRef, useState } from "react";
 import Markdowns from "@/components/markdowns/edit";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

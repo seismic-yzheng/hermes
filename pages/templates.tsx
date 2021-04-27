@@ -1,4 +1,4 @@
-import Skeleton from "react-loading-skeleton";
+
 import React, { useState } from "react";
 import Templates from "@/components/templates";
 import Container from "react-bootstrap/Container";
@@ -8,12 +8,8 @@ import TopNavBar from "components/nav";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import { useClientRouter } from "use-client-router";
-import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
 import Pagination from "react-bootstrap/Pagination";
-import { useRouter } from "next/router";
 
 import { getTemplates } from "@/lib/swr-hooks";
 

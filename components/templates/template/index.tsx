@@ -1,11 +1,5 @@
-import { useState } from "react";
-import Link from "next/link";
-import { mutate } from "swr";
 
-import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
-import Router, { useRouter } from "next/router";
-import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import StarRatingComponent from "react-star-rating-component";
 import "@fortawesome/fontawesome-free/css/all.min.css";

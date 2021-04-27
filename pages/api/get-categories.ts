@@ -1,9 +1,5 @@
 import { NextApiHandler } from "next";
 import Filter from "bad-words";
-import { getCategories } from "../../lib/textrazor";
-import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
-import { templateTableName } from "../../lib/constants";
-import { storeMarkdownForTemplate } from "../../lib/markdown";
 
 const filter = new Filter();
 

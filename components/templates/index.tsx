@@ -1,6 +1,4 @@
 import Template from "./template";
-import CardDeck from "react-bootstrap/Card";
-import CardColumns from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

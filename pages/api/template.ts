@@ -1,8 +1,4 @@
 import { NextApiHandler } from "next";
-import { query, buildStatementForInsert, getColumnValue } from "../../lib/db";
-import { templateTableName } from "../../lib/constants";
-import { storeMarkdownForTemplate } from "../../lib/markdown";
-import { storeCategoryForTemplate } from "../../lib/category";
 import { storeTemplate } from "../../lib/template";
 
 const createTemplateHandler: NextApiHandler = async (req, res) => {

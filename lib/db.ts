@@ -1,6 +1,5 @@
 import mysql from "serverless-mysql";
 import Filter from "bad-words";
-import { stat } from "fs";
 
 const filter = new Filter();
 

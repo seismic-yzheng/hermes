@@ -1,4 +1,4 @@
-import { createTransport, createTestAccount } from "nodemailer";
+import { createTransport } from "nodemailer";
 
 export async function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
