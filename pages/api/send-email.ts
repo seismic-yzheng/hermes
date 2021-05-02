@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
 import { render, updateTemplateUsed } from "../../lib/template";
+import { sendEmail } from "../../lib/helper";
 
 const sendEmailHandler: NextApiHandler = async (req, res) => {
   if (req.method != "POST") {

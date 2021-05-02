@@ -1,0 +1,382 @@
+{
+  "name": "Percolate Notification - Content Assign",
+  "design": {
+    "body": {
+      "rows": [
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_1", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "hideDesktop": false,
+            "duplicatable": true,
+            "backgroundColor": "#ffffff",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": ""
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_1",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#ffffff"
+              },
+              "contents": [
+                {
+                  "type": "image",
+                  "values": {
+                    "src": {
+                      "url": "https://learn.seismic.com/rs/217-LXS-149/images/Percolate%20by%20Seismic%20Logo%20Full%20Color.PNG",
+                      "width": 820,
+                      "height": 252,
+                      "maxWidth": "46%",
+                      "autoWidth": false
+                    },
+                    "_meta": {
+                      "htmlID": "u_content_image_1",
+                      "htmlClassNames": "u_content_image"
+                    },
+                    "action": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "altText": "Image",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "right",
+                    "selectable": true,
+                    "hideDesktop": false,
+                    "duplicatable": true,
+                    "containerPadding": "10px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [1],
+          "values": {
+            "_meta": { "htmlID": "u_row_2", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "duplicatable": true,
+            "backgroundColor": "#ffffff",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": ""
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_2",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#ffffff"
+              },
+              "contents": [
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 26px; line-height: 36.4px;\">Content has been assigned to you.</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_1",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#7e8c8d",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px"
+                  }
+                },
+                {
+                  "type": "divider",
+                  "values": {
+                    "_meta": {
+                      "htmlID": "u_content_divider_1",
+                      "htmlClassNames": "u_content_divider"
+                    },
+                    "width": "100%",
+                    "border": {
+                      "borderTopColor": "#BBBBBB",
+                      "borderTopStyle": "solid",
+                      "borderTopWidth": "1px"
+                    },
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px"
+                  }
+                },
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Team: {{team}}</span><br /><span style=\"font-size: 18px; line-height: 25.2px;\">Created by:&nbsp; &nbsp;{{creator}}</span></p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_2",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#34495e",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "26px"
+                  }
+                },
+                {
+                  "type": "button",
+                  "values": {
+                    "href": {
+                      "name": "web",
+                      "attrs": { "href": "{{href}}", "target": "{{target}}" },
+                      "values": { "href": "{{link}}", "target": "_blank" }
+                    },
+                    "size": { "width": "100%", "autoWidth": true },
+                    "text": "<span style=\"font-size: 14px; line-height: 16.8px;\">VIEW CONTENT</span>",
+                    "_meta": {
+                      "htmlID": "u_content_button_1",
+                      "htmlClassNames": "u_content_button"
+                    },
+                    "border": {},
+                    "padding": "13px",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "left",
+                    "lineHeight": "120%",
+                    "selectable": true,
+                    "borderRadius": "4px",
+                    "buttonColors": {
+                      "color": "#FFFFFF",
+                      "hoverColor": "#FFFFFF",
+                      "backgroundColor": "#f07a0d",
+                      "hoverBackgroundColor": "#3AAEE0"
+                    },
+                    "duplicatable": true,
+                    "calculatedWidth": 133,
+                    "calculatedHeight": 42,
+                    "containerPadding": "10px 10px 29px"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "cells": [20.33, 79.67],
+          "values": {
+            "_meta": { "htmlID": "u_row_3", "htmlClassNames": "u_row" },
+            "columns": false,
+            "padding": "0px 0px 30px",
+            "hideable": true,
+            "deletable": true,
+            "draggable": true,
+            "selectable": true,
+            "duplicatable": true,
+            "backgroundColor": "#ffffff",
+            "backgroundImage": {
+              "url": "",
+              "cover": false,
+              "center": true,
+              "repeat": false,
+              "fullWidth": true
+            },
+            "displayCondition": null,
+            "columnsBackgroundColor": "#ffffff"
+          },
+          "columns": [
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_3",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": "#ffffff"
+              },
+              "contents": [
+                {
+                  "type": "image",
+                  "values": {
+                    "src": {
+                      "url": "https://store-images.s-microsoft.com/image/apps.32639.6d73c312-a41b-4b04-96ee-3d9083d247ba.4f9fa58b-a18d-4afa-a407-6e206a3b992d.683f1178-1006-4889-8292-3c573d1df069.png",
+                      "width": 300,
+                      "height": 300,
+                      "maxWidth": "55%",
+                      "autoWidth": false
+                    },
+                    "_meta": {
+                      "htmlID": "u_content_image_2",
+                      "htmlClassNames": "u_content_image"
+                    },
+                    "action": {
+                      "name": "web",
+                      "values": { "href": "", "target": "_blank" }
+                    },
+                    "altText": "Image",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "textAlign": "center",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "8px"
+                  }
+                }
+              ]
+            },
+            {
+              "values": {
+                "_meta": {
+                  "htmlID": "u_column_4",
+                  "htmlClassNames": "u_column"
+                },
+                "border": {},
+                "padding": "0px",
+                "backgroundColor": ""
+              },
+              "contents": [
+                {
+                  "type": "text",
+                  "values": {
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">Thanks,<br />Your friends at Percolate</p>",
+                    "_meta": {
+                      "htmlID": "u_content_text_3",
+                      "htmlClassNames": "u_content_text"
+                    },
+                    "color": "#000000",
+                    "hideable": true,
+                    "deletable": true,
+                    "draggable": true,
+                    "linkStyle": {
+                      "inherit": true,
+                      "linkColor": "#0000ee",
+                      "linkUnderline": true,
+                      "linkHoverColor": "#0000ee",
+                      "linkHoverUnderline": true
+                    },
+                    "textAlign": "left",
+                    "lineHeight": "140%",
+                    "selectable": true,
+                    "duplicatable": true,
+                    "containerPadding": "10px"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "values": {
+        "_meta": { "htmlID": "u_body", "htmlClassNames": "u_body" },
+        "linkStyle": {
+          "body": true,
+          "linkColor": "#0000ee",
+          "linkUnderline": true,
+          "linkHoverColor": "#0000ee",
+          "linkHoverUnderline": true
+        },
+        "fontFamily": {
+          "label": "Arial",
+          "value": "arial,helvetica,sans-serif"
+        },
+        "contentAlign": "center",
+        "contentWidth": "500px",
+        "preheaderText": "",
+        "backgroundColor": "#e7e7e7",
+        "backgroundImage": {
+          "url": "",
+          "cover": false,
+          "center": true,
+          "repeat": false,
+          "fullWidth": true
+        }
+      }
+    },
+    "counters": {
+      "u_row": 3,
+      "u_column": 4,
+      "u_content_text": 3,
+      "u_content_image": 2,
+      "u_content_button": 1,
+      "u_content_divider": 1
+    },
+    "schemaVersion": 5
+  },
+  "subject": "Content assigned: [{{team}}] {{title}}",
+  "creator": "user:1",
+  "likes": 3,
+  "used": 3,
+  "total_rate": 15,
+  "rate_count": 3,
+  "rate": 5,
+  "shared": 1,
+  "categories": ["percolate", "notification"],
+  "markdowns": [
+    { "name": "team", "type": "string" },
+    { "name": "creator", "type": "string" },
+    { "name": "link", "type": "string" },
+    { "name": "title", "type": "string" }
+  ],
+  "reviews": [
+    { "review": "Good template!", "rate": 5, "user": "user:2" },
+    { "review": "Very useful!", "rate": 5, "user": "user:3" }
+  ]
+}
