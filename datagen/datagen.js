@@ -19,7 +19,6 @@ const db = mysql({
 
 async function query(q, values) {
   try {
-    console.log(q, values);
     const results = await db.query(q, values);
     await db.end();
     return results;
@@ -140,7 +139,6 @@ async function datagen() {
         data["shared"],
         html
       );
-      console.log(template_id);
       await createMarkdown(template_id, data["markdowns"]);
       await createCategory(template_id, data["categories"]);
       await createReview(template_id, data["reviews"]);

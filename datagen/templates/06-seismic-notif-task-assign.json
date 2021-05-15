@@ -1,5 +1,5 @@
 {
-  "name": "Percolate Notification - Content Assign",
+  "name": "Seismic Notification - Task Assign",
   "design": {
     "body": {
       "rows": [
@@ -42,9 +42,9 @@
                   "type": "image",
                   "values": {
                     "src": {
-                      "url": "https://learn.seismic.com/rs/217-LXS-149/images/Percolate%20by%20Seismic%20Logo%20Full%20Color.PNG",
-                      "width": 820,
-                      "height": 252,
+                      "url": "https://findvectorlogo.com/wp-content/uploads/2018/12/seismic-vector-logo.png",
+                      "width": 900,
+                      "height": 500,
                       "maxWidth": "46%",
                       "autoWidth": false
                     },
@@ -81,6 +81,7 @@
             "deletable": true,
             "draggable": true,
             "selectable": true,
+            "hideDesktop": false,
             "duplicatable": true,
             "backgroundColor": "#ffffff",
             "backgroundImage": {
@@ -108,7 +109,7 @@
                 {
                   "type": "text",
                   "values": {
-                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 26px; line-height: 36.4px;\">Content has been assigned to you.</span></p>",
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 24px; line-height: 33.6px;\">Task {{title}} has been assigned to you.</span></p>",
                     "_meta": {
                       "htmlID": "u_content_text_1",
                       "htmlClassNames": "u_content_text"
@@ -127,6 +128,7 @@
                     "textAlign": "left",
                     "lineHeight": "140%",
                     "selectable": true,
+                    "hideDesktop": false,
                     "duplicatable": true,
                     "containerPadding": "10px"
                   }
@@ -149,6 +151,7 @@
                     "draggable": true,
                     "textAlign": "center",
                     "selectable": true,
+                    "hideDesktop": false,
                     "duplicatable": true,
                     "containerPadding": "10px"
                   }
@@ -156,7 +159,7 @@
                 {
                   "type": "text",
                   "values": {
-                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Team: {{team}}</span><br /><span style=\"font-size: 18px; line-height: 25.2px;\">Created by:&nbsp; &nbsp;{{creator}}</span></p>",
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Created by:&nbsp; &nbsp;{{creator}}</span></p>\n<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px;\">Created at: &nbsp; {{created_at}}</span></p>",
                     "_meta": {
                       "htmlID": "u_content_text_2",
                       "htmlClassNames": "u_content_text"
@@ -175,6 +178,7 @@
                     "textAlign": "left",
                     "lineHeight": "140%",
                     "selectable": true,
+                    "hideDesktop": false,
                     "duplicatable": true,
                     "containerPadding": "26px"
                   }
@@ -201,6 +205,7 @@
                     "textAlign": "left",
                     "lineHeight": "120%",
                     "selectable": true,
+                    "hideDesktop": false,
                     "borderRadius": "4px",
                     "buttonColors": {
                       "color": "#FFFFFF",
@@ -228,6 +233,7 @@
             "deletable": true,
             "draggable": true,
             "selectable": true,
+            "hideDesktop": false,
             "duplicatable": true,
             "backgroundColor": "#ffffff",
             "backgroundImage": {
@@ -256,11 +262,11 @@
                   "type": "image",
                   "values": {
                     "src": {
-                      "url": "https://store-images.s-microsoft.com/image/apps.32639.6d73c312-a41b-4b04-96ee-3d9083d247ba.4f9fa58b-a18d-4afa-a407-6e206a3b992d.683f1178-1006-4889-8292-3c573d1df069.png",
-                      "width": 300,
-                      "height": 300,
-                      "maxWidth": "55%",
-                      "autoWidth": false
+                      "url": "https://www.pinclipart.com/picdir/middle/208-2086677_seismic-logo-clipart.png",
+                      "width": 880,
+                      "height": 563,
+                      "maxWidth": "100%",
+                      "autoWidth": true
                     },
                     "_meta": {
                       "htmlID": "u_content_image_2",
@@ -276,6 +282,7 @@
                     "draggable": true,
                     "textAlign": "center",
                     "selectable": true,
+                    "hideDesktop": false,
                     "duplicatable": true,
                     "containerPadding": "8px"
                   }
@@ -296,12 +303,11 @@
                 {
                   "type": "text",
                   "values": {
-                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">Thanks,<br />Your friends at Percolate</p>",
+                    "text": "<p style=\"font-size: 14px; line-height: 140%;\">Thanks,<br />Your friends at Seismic</p>",
                     "_meta": {
                       "htmlID": "u_content_text_3",
                       "htmlClassNames": "u_content_text"
                     },
-                    "color": "#000000",
                     "hideable": true,
                     "deletable": true,
                     "draggable": true,
@@ -315,6 +321,7 @@
                     "textAlign": "left",
                     "lineHeight": "140%",
                     "selectable": true,
+                    "hideDesktop": false,
                     "duplicatable": true,
                     "containerPadding": "10px"
                   }
@@ -333,6 +340,7 @@
           "linkHoverColor": "#0000ee",
           "linkHoverUnderline": true
         },
+        "textColor": "#000000",
         "fontFamily": {
           "label": "Arial",
           "value": "arial,helvetica,sans-serif"
@@ -358,9 +366,9 @@
       "u_content_button": 1,
       "u_content_divider": 1
     },
-    "schemaVersion": 5
+    "schemaVersion": 6
   },
-  "subject": "Content assigned: [{{team}}] {{title}}",
+  "subject": "Task assigned: {{title}}",
   "creator": "user:1",
   "likes": 3,
   "used": 3,
@@ -368,9 +376,9 @@
   "rate_count": 3,
   "rate": 5,
   "shared": 1,
-  "categories": ["percolate", "notification"],
+  "categories": ["seismic", "notification"],
   "markdowns": [
-    { "name": "team", "type": "string" },
+    { "name": "created_at", "type": "string" },
     { "name": "creator", "type": "string" },
     { "name": "link", "type": "string" },
     { "name": "title", "type": "string" }

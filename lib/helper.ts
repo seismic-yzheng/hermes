@@ -18,9 +18,10 @@ export async function sendEmail(
   subject: string,
   html: string
 ) {
+  // smtp://127.0.0.1:1025
   let transporter = createTransport({
-    host: "172.17.8.100",
-    port: 32500,
+    host: "127.0.0.1",
+    port: 1025,
     secure: false,
   });
 
