@@ -1,13 +1,11 @@
 export async function getCategories(text: string) {
   const textrazorURL = "https://api.textrazor.com";
-  const textrazorAPIKey =
-    "e8f3c6e62dbdc8f86f18deeddb3d29e6f403de83f41a818541ff1053";
   const max_category = 5;
   const body =
     "extractors=topics,categories&classifiers=textrazor_newscodes&text=" + text;
   const result = await fetch(textrazorURL, {
     method: "POST",
-    headers: { "x-textrazor-key": textrazorAPIKey },
+    headers: { "x-textrazor-key": process.env.TEXTRAZOR_API_KEY },
     body: body,
   });
   if (result.status != 200) {
