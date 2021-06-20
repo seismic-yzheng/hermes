@@ -25,6 +25,9 @@ const App = (props) => {
   const HTMLPostfix = [";", "}", "{", ","];
 
   const isHTML = (text: String) => {
+    if (text.indexOf("{{") > -1 || text.indexOf("}}") > -1) {
+      return false;
+    }
     return (
       HTMLPrefix.indexOf(text[0]) > -1 ||
       HTMLPostfix.indexOf(text[text.length - 1]) > -1

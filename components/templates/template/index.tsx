@@ -1,9 +1,9 @@
-
 import "bootstrap/dist/css/bootstrap.css";
 import Card from "react-bootstrap/Card";
 import StarRatingComponent from "react-star-rating-component";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaFireAlt } from "react-icons/fa";
+import Router from "next/router";
 
 function Template({ template, user }) {
   async function deleteTemplate() {
