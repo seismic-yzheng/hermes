@@ -74,14 +74,17 @@ export async function updateTemplateRate(id: number, rate: number) {
 }
 
 export function apply(template: string, markdowns: object) {
+  // markdowns = { test: { name: "abc" } };
   return Mustache.render(template, markdowns);
 }
 
-export function validMarkdownType(type_str: string, value: any) {
+export function convertMarkdownType(type_str: string, value: any) {
   if (type_str == "string") {
-    return value instanceof String;
-  } else if ((type_str = "list")) {
-    return value instanceof Array;
+    return value;
+  } else if (type_str == "list") {
+    return JSON.parse(value);
+  } else if (type_str == "dict") {
+    return JSON.parse(value);
   } else {
     throw Error("Undefined type: " + type_str);
   }
@@ -96,8 +99,8 @@ export function validAndMergeMarkdowns(
     let name = stored_markdown.name;
     if (name in markdowns) {
       const value = markdowns[name];
-      validMarkdownType(stored_markdown.type, value);
-      res[name] = markdowns[name];
+      let converted_value = convertMarkdownType(stored_markdown.type, value);
+      res[name] = converted_value;
     } else {
       if (stored_markdown.default_value != undefined) {
         res[name] = stored_markdown.default_value;
@@ -120,7 +123,7 @@ export async function render(
   }
   const result = results[0];
   const stored_markdowns = (await getMarkdownForTemplate(result.id)) as any[];
-  const validMarkDowns = validAndMergeMarkdowns(markdowns, stored_markdowns);
+  // const validMarkDowns = validAndMergeMarkdowns(markdowns, stored_markdowns);
   let emailSubject = subject ? subject : result.subject;
   if (!emailSubject) {
     emailSubject = "No subject";
